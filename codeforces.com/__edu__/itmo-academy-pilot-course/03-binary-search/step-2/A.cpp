@@ -5,26 +5,25 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int w, h, n;
+    long long w, h, n;
     cin >> w >> h >> n;
 
-    int numRows = 1;
-    int numCols = 1;
-    int width = w;
-    int height = h;
+    long long side = 0;
+    long long rowsFilled = 0;
+    long long columnsFilled = 0;
 
-    while (n > 0) {
-        if ((width + w) < (height + h)) {
-            width += w;
-            n -= numRows;
-            numCols++;
+    for (int i = 0; i < n; i++) {
+        if (max(rowsFilled + h, side) < max(columnsFilled + w, side)) {
+            rowsFilled += h;
+            columnsFilled = 0;
+            side = max(rowsFilled, side);
         } else {
-            height += h;
-            n -= numCols;
-            numRows++;
+            columnsFilled += w;
+            rowsFilled = 0;
+            side = max(columnsFilled, side);
         }
     }
-    cout << max(width, height);
+    cout << side;
 
     return 0;
 }

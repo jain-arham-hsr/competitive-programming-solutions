@@ -12,7 +12,8 @@
       "presentation": {
         "reveal": "silent",
         "close": true
-      }
+      },
+      "problemMatcher": []
     },
     {
       "label": "compile",
@@ -27,9 +28,10 @@
         "-Wconversion",
         "-Wno-sign-conversion",
         "-D_GLIBCXX_DEBUG",
+        "-DDEBUGGER",
         "-o",
-        "${workspaceFolder}/__exec__/compiled.out", // Fixed binary name in root
-        "${file}" // Current source file
+        "${workspaceFolder}/__exec__/compiled.out",
+        "${file}"
       ],
       "group": "build",
       "presentation": {
@@ -40,9 +42,9 @@
     {
       "label": "run",
       "type": "shell",
-      "command": "./compiled.out", // Fixed binary name
+      "command": "./compiled.out",
       "options": {
-        "cwd": "${workspaceFolder}/__exec__" // Root execution directory
+        "cwd": "${workspaceFolder}/__exec__"
       },
       "group": "none",
       "dependsOn": ["compile"],
@@ -54,9 +56,9 @@
     {
       "label": "compile and run",
       "type": "shell",
-      "command": "./compiled.out < input.txt > output.txt", // Fixed binary name
+      "command": "./compiled.out < input.txt > output.txt",
       "options": {
-        "cwd": "${workspaceFolder}/__exec__" // Root execution directory
+        "cwd": "${workspaceFolder}/__exec__"
       },
       "group": {
         "kind": "build",

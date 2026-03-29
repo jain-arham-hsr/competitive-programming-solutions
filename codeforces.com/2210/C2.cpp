@@ -43,35 +43,34 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int a = 60;
-    vector<bool> isPrime(a + 1, true);
-    isPrime[0] = false;
-    isPrime[1] = false;
-    for (long long i = 2; i <= a; i++) {
-        if (!isPrime[i])
-            continue;
-        for (long long j = i * i; j <= a; j += i) {
-            isPrime[j] = false;
-        }
-    }
-
     int T;
     cin >> T;
     while (T--) {
         int n;
         cin >> n;
-        long long gcdVal = 0;
-        for (int i = 0; i < n; i++) {
-            long long num;
-            cin >> num;
-            gcdVal = gcd(gcdVal, num);
-        }
-        for (int i = 0; i <= a; i++) {
-            if (isPrime[i] && gcdVal % i != 0) {
-                cout << i << "\n";
-                break;
+        vector<int> a(n);
+        vector<int> b(n);
+        for (auto &x : a)
+            cin >> x;
+        for (auto &x : b)
+            cin >> x;
+        int res = 0;
+        for (int i = 1; i < n - 1; i++) {
+            int changeTo = lcm(gcd(a[i], a[i - 1]), gcd(a[i], a[i + 1]));
+            if ((a[i] != changeTo && changeTo < b[i]) ||
+                (a[i] != 2 * changeTo && 2 * changeTo < b[i])) {
+                res++;
             }
         }
+        int initGcd = gcd(a[0], a[1]);
+        int lastGcd = gcd(a[n - 1], a[n - 2]);
+        if ((a[0] != initGcd && initGcd < b[0]) ||
+            (a[0] != 2 * initGcd && 2 * initGcd < b[0]))
+            res++;
+        if ((a[n - 1] != lastGcd && lastGcd < b[n - 1]) ||
+            (a[n - 1] != 2 * lastGcd && 2 * lastGcd < b[n - 1]))
+            res++;
+        cout << res << "\n";
     }
     return 0;
 }

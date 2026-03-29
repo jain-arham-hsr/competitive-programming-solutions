@@ -43,35 +43,28 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int a = 60;
-    vector<bool> isPrime(a + 1, true);
-    isPrime[0] = false;
-    isPrime[1] = false;
-    for (long long i = 2; i <= a; i++) {
-        if (!isPrime[i])
-            continue;
-        for (long long j = i * i; j <= a; j += i) {
-            isPrime[j] = false;
-        }
-    }
-
     int T;
     cin >> T;
     while (T--) {
         int n;
         cin >> n;
-        long long gcdVal = 0;
-        for (int i = 0; i < n; i++) {
-            long long num;
-            cin >> num;
-            gcdVal = gcd(gcdVal, num);
+        vector<int> nums(n);
+        for (auto &x : nums)
+            cin >> x;
+        for (auto &x : nums)
+            cin >> x;
+        int res = 0;
+        for (int i = 1; i < n - 1; i++) {
+            int changeTo =
+                lcm(gcd(nums[i], nums[i - 1]), gcd(nums[i], nums[i + 1]));
+            if (nums[i] != changeTo)
+                res++;
         }
-        for (int i = 0; i <= a; i++) {
-            if (isPrime[i] && gcdVal % i != 0) {
-                cout << i << "\n";
-                break;
-            }
-        }
+        if (nums[0] != gcd(nums[0], nums[1]))
+            res++;
+        if (nums[n - 1] != gcd(nums[n - 1], nums[n - 2]))
+            res++;
+        cout << res << "\n";
     }
     return 0;
 }

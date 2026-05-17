@@ -50,7 +50,7 @@ int main() {
         cin >> a >> b >> xk >> yk >> xq >> yq;
         set<pair<int, int>> moves = {{a, b}, {a, -b}, {-a, b}, {-a, -b},
                                      {b, a}, {b, -a}, {-b, a}, {-b, -a}};
-        map<pair<int, int>, bool> pos;
+        unordered_map<pair<int, int>, bool> pos;
         int res = 0;
         for (auto move : moves) {
             pos[{xk + move.first, yk + move.second}] = true;

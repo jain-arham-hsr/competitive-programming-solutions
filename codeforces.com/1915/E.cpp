@@ -23,7 +23,7 @@ int main() {
             }
         }
         bool ok = false;
-        map<long long, bool> exists;
+        unordered_map<long long, bool> exists;
         for (int i = 0; i < n; i++) {
             if (exists[prefSum[i]] || prefSum[i] == 0) {
                 ok = true;

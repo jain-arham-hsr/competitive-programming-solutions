@@ -11,7 +11,7 @@ int main() {
         int n;
         cin >> n;
         vector<int> nums(n);
-        map<int, int> freq;
+        unordered_map<int, int> freq;
         for (auto &x : nums) {
             cin >> x;
             freq[x]++;

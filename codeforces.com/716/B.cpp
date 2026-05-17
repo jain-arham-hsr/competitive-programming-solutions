@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-string createNiceWord(map<char, int> &alphaCount, string wordMask, int start,
-                      int end) {
+string createNiceWord(unordered_map<char, int> &alphaCount, string wordMask,
+                      int start, int end) {
     char upperAlphaBegin = 65;
     vector<char> alphas;
     alphas.reserve(26);
@@ -32,7 +32,7 @@ int main() {
     cin >> s;
 
     int totalCount = 0;
-    map<char, int> alphaCount;
+    unordered_map<char, int> alphaCount;
 
     if (s.size() < 26) {
         cout << -1;

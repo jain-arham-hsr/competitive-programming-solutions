@@ -5,7 +5,7 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    map<int, int> s;
+    unordered_map<int, int> s;
     for (int i = 0; i < 4; i++) {
         int num;
         cin >> num;

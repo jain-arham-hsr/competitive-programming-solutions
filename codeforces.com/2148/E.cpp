@@ -13,7 +13,7 @@ int main() {
         vector<int> nums(n);
         for (auto &x : nums)
             cin >> x;
-        map<int, int> cnt;
+        unordered_map<int, int> cnt;
         for (int i = 0; i < n; i++) {
             cnt[nums[i]]++;
         }
@@ -35,7 +35,7 @@ int main() {
         }
         long long res = 0;
         int currValid = reqValid;
-        map<int, int> currCnt;
+        unordered_map<int, int> currCnt;
         int l = 0;
         for (int r = 0; r < n; r++) {
             currCnt[nums[r]]++;

@@ -8,7 +8,7 @@ int main() {
     int n;
     cin >> n;
 
-    map<int, int> sizeCounts;
+    unordered_map<int, int> sizeCounts;
 
     for (int i = 0; i < n; i++) {
         int size;

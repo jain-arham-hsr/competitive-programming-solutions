@@ -7,7 +7,7 @@ int main() {
 
     int n, m;
     cin >> n >> m;
-    map<string, string> ipNames;
+    unordered_map<string, string> ipNames;
 
     for (int i = 0; i < n; i++) {
         string name, ip;

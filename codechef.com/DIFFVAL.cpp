@@ -11,7 +11,7 @@ int main() {
         string s;
         cin >> s;
 
-        map<int, int> columnSum;
+        unordered_map<int, int> columnSum;
         int currentCol = 0;
 
         int tempN = n;
@@ -30,7 +30,7 @@ int main() {
         int a = min(oddColumns, evenColumns);
         int d = abs(oddColumns - evenColumns);
 
-        map<int, int> count;
+        unordered_map<int, int> count;
 
         for (int i = 0; i < n; i++) {
             count[s[i] - '0']++;

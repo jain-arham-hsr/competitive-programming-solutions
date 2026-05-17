@@ -10,7 +10,7 @@ int main() {
     while (T--) {
         int n;
         cin >> n;
-        map<int, int> numCount;
+        unordered_map<int, int> numCount;
         for (int i = 0; i < n; i++) {
             int num;
             cin >> num;

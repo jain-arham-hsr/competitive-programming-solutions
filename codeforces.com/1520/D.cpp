@@ -13,7 +13,7 @@ int main() {
         vector<int> nums(n);
         for (auto &x : nums)
             cin >> x;
-        map<int, int> cnt;
+        unordered_map<int, int> cnt;
         long long res = 0;
         for (int i = 0; i < n; i++) {
             res += cnt[nums[i] - i];

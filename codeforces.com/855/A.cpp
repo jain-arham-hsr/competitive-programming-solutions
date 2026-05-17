@@ -8,7 +8,7 @@ int main() {
     int n;
     cin >> n;
 
-    map<string, bool> hasOccurred;
+    unordered_map<string, bool> hasOccurred;
 
     for (int i = 0; i < n; i++) {
         string name;

@@ -11,7 +11,7 @@ int main() {
         string s;
         cin >> s;
 
-        map<char, int> charCount;
+        unordered_map<char, int> charCount;
 
         for (int i = 0; i < s.size(); i++) {
             charCount[s[i]]++;

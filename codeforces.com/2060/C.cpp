@@ -11,7 +11,7 @@ int main() {
         int n, k;
         cin >> n >> k;
         int numOfPairs = 0;
-        map<int, int> isUnpaired;
+        unordered_map<int, int> isUnpaired;
         for (int i = 0; i < n; i++) {
             int num;
             cin >> num;

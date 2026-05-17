@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int numMinutes(int x, int k, map<int, int> &memo) {
+int numMinutes(int x, int k, unordered_map<int, int> &memo) {
     if (x == k) {
         memo[x] = 0;
         return 0;
@@ -52,7 +52,7 @@ int main() {
     while (T--) {
         int n, k;
         cin >> n >> k;
-        map<int, int> memo;
+        unordered_map<int, int> memo;
         cout << numMinutes(n, k, memo) << "\n";
     }
     return 0;

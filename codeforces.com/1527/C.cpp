@@ -13,7 +13,7 @@ int main() {
 
         long long sumOfWeights = 0;
 
-        map<int, long long> counts;
+        unordered_map<int, long long> counts;
 
         for (int i = 0; i < n; i++) {
             int num;

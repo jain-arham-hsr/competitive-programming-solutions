@@ -8,7 +8,7 @@ int main() {
     int n;
     cin >> n;
 
-    map<string, int> names;
+    unordered_map<string, int> names;
 
     for (int i = 0; i < n; i++) {
         string userInp;

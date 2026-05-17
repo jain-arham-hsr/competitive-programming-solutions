@@ -14,7 +14,7 @@ int main() {
         vector<int> b(m);
         for (auto &x : b)
             cin >> x;
-        map<int, int> freq;
+        unordered_map<int, int> freq;
         for (int i = 0; i < m; i++)
             freq[b[i]]++;
         int numPairs = n - 1;

@@ -12,7 +12,7 @@ int main() {
     for (auto &x : messages)
         cin >> x;
 
-    map<string, bool> isIncluded;
+    unordered_map<string, bool> isIncluded;
 
     for (int i = n - 1; i >= 0; i--) {
         if (!isIncluded[messages[i]]) {

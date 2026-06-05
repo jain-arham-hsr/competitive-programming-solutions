@@ -40,36 +40,30 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-int findMaxVal(vector<pair<int, int>> &items, vector<int> &dp, int remWt) {
-    if (dp[remWt] != -1)
-        return dp[remWt];
-
-    int n = items.size();
-    int maxVal = 0;
-    for (int i = 0; i < n; i++) {
-        if (remWt - items[i].first < 0)
-            continue;
-        maxVal = max(maxVal, items[i].second +
-                                 findMaxVal(items, dp, remWt - items[i].first));
-    }
-    return dp[remWt] = maxVal;
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int n, W;
-    cin >> n >> W;
-    vector<pair<int, int>> items(n);
-    for (auto &x : items)
-        cin >> x.second;
-    for (auto &x : items)
-        cin >> x.first;
-
-    vector<int> dp(W + 1, -1);
-
-    cout << findMaxVal(items, dp, W);
-
+    int T;
+    cin >> T;
+    while (T--) {
+        int n, q;
+        cin >> n >> q;
+        vector<ll> nums(n);
+        for (auto &x : nums)
+            cin >> x;
+        sort(nums.rbegin(), nums.rend());
+        vector<ll> prefSum(n + 1);
+        partial_sum(nums.begin(), nums.end(), prefSum.begin() + 1);
+        while (q--) {
+            int thres;
+            cin >> thres;
+            auto it = lower_bound(prefSum.begin(), prefSum.end(), thres);
+            if (it == prefSum.end())
+                cout << -1 << "\n";
+            else
+                cout << (it - prefSum.begin()) << "\n";
+        }
+    }
     return 0;
 }

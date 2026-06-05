@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
 
 template <typename A, typename B>
 ostream &operator<<(ostream &os, const pair<A, B> &p) {
@@ -40,36 +39,28 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-int findMaxVal(vector<pair<int, int>> &items, vector<int> &dp, int remWt) {
-    if (dp[remWt] != -1)
-        return dp[remWt];
-
-    int n = items.size();
-    int maxVal = 0;
-    for (int i = 0; i < n; i++) {
-        if (remWt - items[i].first < 0)
-            continue;
-        maxVal = max(maxVal, items[i].second +
-                                 findMaxVal(items, dp, remWt - items[i].first));
-    }
-    return dp[remWt] = maxVal;
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int n, W;
-    cin >> n >> W;
-    vector<pair<int, int>> items(n);
-    for (auto &x : items)
-        cin >> x.second;
-    for (auto &x : items)
-        cin >> x.first;
-
-    vector<int> dp(W + 1, -1);
-
-    cout << findMaxVal(items, dp, W);
-
+    int T;
+    cin >> T;
+    while (T--) {
+        int n, k;
+        cin >> n >> k;
+        vector<pair<int, pair<int, int>>> casinos(n);
+        for (auto &x : casinos)
+            cin >> x.second.first >> x.second.second >> x.first;
+        sort(casinos.begin(), casinos.end());
+        int curr = k;
+        for (int i = 0; i < n; i++) {
+            if (casinos[i].first <= curr)
+                continue;
+            if (casinos[i].second.first <= curr &&
+                casinos[i].second.second >= curr)
+                curr = casinos[i].first;
+        }
+        cout << curr << "\n";
+    }
     return 0;
 }

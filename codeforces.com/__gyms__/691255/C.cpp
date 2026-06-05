@@ -40,36 +40,44 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-int findMaxVal(vector<pair<int, int>> &items, vector<int> &dp, int remWt) {
-    if (dp[remWt] != -1)
-        return dp[remWt];
+int findMinCount(vector<int> &dp, vector<int> &coins, int sum) {
+    int minCount = -1;
 
-    int n = items.size();
-    int maxVal = 0;
-    for (int i = 0; i < n; i++) {
-        if (remWt - items[i].first < 0)
+    if (dp[sum] != -2)
+        return dp[sum];
+
+    if (sum == 0)
+        return 0;
+
+    for (int i = 0; i < coins.size(); i++) {
+        if (sum - coins[i] < 0)
             continue;
-        maxVal = max(maxVal, items[i].second +
-                                 findMaxVal(items, dp, remWt - items[i].first));
+        int subres = findMinCount(dp, coins, sum - coins[i]);
+        if (subres == -1)
+            continue;
+        int count = 1 + subres;
+        if (minCount == -1)
+            minCount = count;
+        else
+            minCount = min(minCount, count);
     }
-    return dp[remWt] = maxVal;
+    return dp[sum] = minCount;
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int n, W;
-    cin >> n >> W;
-    vector<pair<int, int>> items(n);
-    for (auto &x : items)
-        cin >> x.second;
-    for (auto &x : items)
-        cin >> x.first;
+    int n, sum;
+    cin >> n >> sum;
 
-    vector<int> dp(W + 1, -1);
+    vector<int> coins(n);
+    for (auto &x : coins)
+        cin >> x;
 
-    cout << findMaxVal(items, dp, W);
+    vector<int> dp(sum + 1, -2);
+
+    cout << findMinCount(dp, coins, sum);
 
     return 0;
 }

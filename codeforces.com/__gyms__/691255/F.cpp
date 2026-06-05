@@ -40,36 +40,40 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-int findMaxVal(vector<pair<int, int>> &items, vector<int> &dp, int remWt) {
-    if (dp[remWt] != -1)
-        return dp[remWt];
+int MOD = 1e9 + 7;
 
-    int n = items.size();
-    int maxVal = 0;
-    for (int i = 0; i < n; i++) {
-        if (remWt - items[i].first < 0)
-            continue;
-        maxVal = max(maxVal, items[i].second +
-                                 findMaxVal(items, dp, remWt - items[i].first));
+long long findValidWays(vector<vector<int>> &dp, int N, bool threeAllowed) {
+
+    if (N < 0)
+        return 0;
+
+    if (dp[N][threeAllowed] != -1)
+        return dp[N][threeAllowed];
+
+    if (N == 0)
+        return dp[N][threeAllowed] = 1;
+    if (threeAllowed) {
+        return dp[N][threeAllowed] = (findValidWays(dp, N - 1, true) +
+                                      findValidWays(dp, N - 2, true) +
+                                      findValidWays(dp, N - 3, false)) %
+                                     MOD;
+    } else {
+        return dp[N][threeAllowed] = (findValidWays(dp, N - 1, true) +
+                                      findValidWays(dp, N - 2, true)) %
+                                     MOD;
     }
-    return dp[remWt] = maxVal;
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int n, W;
-    cin >> n >> W;
-    vector<pair<int, int>> items(n);
-    for (auto &x : items)
-        cin >> x.second;
-    for (auto &x : items)
-        cin >> x.first;
+    int N;
+    cin >> N;
 
-    vector<int> dp(W + 1, -1);
+    vector<vector<int>> dp(N + 1, vector<int>(2, -1));
 
-    cout << findMaxVal(items, dp, W);
+    cout << findValidWays(dp, N, true);
 
     return 0;
 }

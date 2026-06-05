@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
 
 template <typename A, typename B>
 ostream &operator<<(ostream &os, const pair<A, B> &p) {
@@ -40,36 +39,39 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-int findMaxVal(vector<pair<int, int>> &items, vector<int> &dp, int remWt) {
-    if (dp[remWt] != -1)
-        return dp[remWt];
-
-    int n = items.size();
-    int maxVal = 0;
-    for (int i = 0; i < n; i++) {
-        if (remWt - items[i].first < 0)
-            continue;
-        maxVal = max(maxVal, items[i].second +
-                                 findMaxVal(items, dp, remWt - items[i].first));
-    }
-    return dp[remWt] = maxVal;
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int n, W;
-    cin >> n >> W;
-    vector<pair<int, int>> items(n);
-    for (auto &x : items)
-        cin >> x.second;
-    for (auto &x : items)
-        cin >> x.first;
+    int T;
+    cin >> T;
+    while (T--) {
+        int n;
+        cin >> n;
+        string s;
+        cin >> s;
+        vector<int> a(n);
+        for (int i = 0; i < n; i++) {
+            a[i] = s[i] == 'a' ? 1 : -1;
+        }
 
-    vector<int> dp(W + 1, -1);
+        vector<int> prefSum(n + 1);
+        partial_sum(a.begin(), a.end(), prefSum.begin() + 1);
 
-    cout << findMaxVal(items, dp, W);
+        unordered_map<int, int> lastOcc;
+        int minLength = n;
 
+        for (int i = 0; i < n + 1; i++) {
+            lastOcc[prefSum[i]] = i;
+            if (lastOcc.count(prefSum[i] - prefSum[n])) {
+                minLength =
+                    min(minLength, i - lastOcc[prefSum[i] - prefSum[n]]);
+            }
+        }
+        if (minLength == n)
+            cout << -1 << "\n";
+        else
+            cout << minLength << "\n";
+    }
     return 0;
 }

@@ -48,31 +48,21 @@ int main() {
     while (T--) {
         int p, q;
         cin >> p >> q;
-        long long total = p + 2 * q;
-        bool exists = false;
-        pair<int, int> ans = {-1, -1};
-        for (int i = 1; i < 1e5; i++) {
-            long long l = i - 1, r = 1e9 + 1;
-            while (l < r - 1) {
-                long long mid = l + (r - l) / 2;
-                long long curr = i + mid + 2 * mid * i;
-                if (curr == total) {
-                    ans = {i, mid};
-                    exists = true;
-                    break;
-                } else if (curr < total) {
-                    l = mid + 1;
-                } else {
-                    r = mid - 1;
-                }
-            }
-            if (exists)
+        long long s = 2 * p + 4 * q + 1;
+        bool ok = false;
+        for (long long i = 1; i * i <= s; i++) {
+            if (s % i == 0 && i % 2 == 1 && (s / i) % 2 == 1) {
+                int n = (i - 1) / 2;
+                int m = (s / i - 1) / 2;
+                if (n < 1 || m < 1 || m * (n + 1) < q || n * (m + 1) < q)
+                    continue;
+                cout << n << " " << m << "\n";
+                ok = true;
                 break;
+            }
         }
-        if (exists)
-            cout << ans.first << " " << ans.second << "\n";
-        else
-            cout << "-1\n";
+        if (!ok)
+            cout << -1 << "\n";
     }
     return 0;
 }

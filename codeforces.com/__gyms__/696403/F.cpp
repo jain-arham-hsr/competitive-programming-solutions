@@ -40,36 +40,36 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-int findMaxVal(vector<pair<int, int>> &items, vector<int> &dp, int remWt) {
-    if (dp[remWt] != -1)
-        return dp[remWt];
-
-    int n = items.size();
-    int maxVal = 0;
-    for (int i = 0; i < n; i++) {
-        if (remWt - items[i].first < 0)
-            continue;
-        maxVal = max(maxVal, items[i].second +
-                                 findMaxVal(items, dp, remWt - items[i].first));
-    }
-    return dp[remWt] = maxVal;
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int n, W;
-    cin >> n >> W;
-    vector<pair<int, int>> items(n);
-    for (auto &x : items)
-        cin >> x.second;
-    for (auto &x : items)
-        cin >> x.first;
+    string s;
+    cin >> s;
 
-    vector<int> dp(W + 1, -1);
+    int n = s.size();
 
-    cout << findMaxVal(items, dp, W);
+    stack<char> t;
+    string u = "";
+
+    vector<int> freq(26);
+
+    for (int i = 0; i < n; i++) {
+        freq[s[i] - 'a']++;
+    }
+
+    for (int i = 0; i < n; i++) {
+        t.push(s[i]);
+        freq[s[i] - 'a']--;
+        while (t.size() && accumulate(freq.begin(),
+                                      freq.begin() + (t.top() - 'a'), 0) == 0) {
+            u += t.top();
+            t.pop();
+        }
+        watch(u);
+    }
+
+    cout << u;
 
     return 0;
 }

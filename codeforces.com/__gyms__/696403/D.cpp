@@ -40,36 +40,44 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-int findMaxVal(vector<pair<int, int>> &items, vector<int> &dp, int remWt) {
-    if (dp[remWt] != -1)
-        return dp[remWt];
-
-    int n = items.size();
-    int maxVal = 0;
-    for (int i = 0; i < n; i++) {
-        if (remWt - items[i].first < 0)
-            continue;
-        maxVal = max(maxVal, items[i].second +
-                                 findMaxVal(items, dp, remWt - items[i].first));
-    }
-    return dp[remWt] = maxVal;
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int n, W;
-    cin >> n >> W;
-    vector<pair<int, int>> items(n);
-    for (auto &x : items)
-        cin >> x.second;
-    for (auto &x : items)
-        cin >> x.first;
-
-    vector<int> dp(W + 1, -1);
-
-    cout << findMaxVal(items, dp, W);
+    int n;
+    cin >> n;
+    vector<int> nums(n);
+    for (auto &x : nums)
+        cin >> x;
+    int firstNum = nums[0], lastFirstInd = 0;
+    int secondNum = nums[0], lastSecondInd = 0;
+    int maxLen = 1;
+    int st = 0;
+    for (int i = 1; i < n; i++) {
+        if (nums[i] == secondNum) {
+            lastSecondInd = i;
+        } else if (nums[i] == firstNum) {
+            lastFirstInd = i;
+        } else {
+            if (firstNum == secondNum) {
+                firstNum = nums[i];
+                lastFirstInd = i;
+            } else if (lastFirstInd < lastSecondInd) {
+                firstNum = nums[i];
+                st = lastFirstInd + 1;
+                lastFirstInd = i;
+            } else {
+                secondNum = nums[i];
+                st = lastSecondInd + 1;
+                lastSecondInd = i;
+            }
+        }
+        watch(st);
+        watch(firstNum, lastFirstInd, secondNum, lastSecondInd);
+        maxLen = max(maxLen, max(lastFirstInd, lastSecondInd) - st + 1);
+        watch(maxLen);
+    }
+    cout << maxLen << "\n";
 
     return 0;
 }

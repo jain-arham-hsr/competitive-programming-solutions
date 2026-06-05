@@ -39,24 +39,6 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-int f(vector<int> &nums, int i, int rem) {
-    if (i == nums.size() && rem > 0) {
-        watch(i, rem, 0);
-        return 1;
-    }
-    if (rem == 0 || i >= nums.size()) {
-        watch(i, rem, 1);
-        return 0;
-    }
-    if (nums.size() - i - 1 < rem) {
-        
-    }
-    int res_next = nums[i] ^ f(nums, i + 1, rem - 1)
-    int res = max(, );
-    watch(i, rem, res);
-    return res;
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
@@ -67,9 +49,15 @@ int main() {
         int n;
         cin >> n;
         vector<int> nums(n);
+        int res = 0;
         for (auto &x : nums)
             cin >> x;
-        cout << f(nums, 0, n / 2 + 1) << "\n";
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                res = max(res, nums[i] ^ nums[j]);
+            }
+        }
+        cout << res << "\n";
     }
     return 0;
 }

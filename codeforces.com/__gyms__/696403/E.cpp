@@ -40,36 +40,36 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-int findMaxVal(vector<pair<int, int>> &items, vector<int> &dp, int remWt) {
-    if (dp[remWt] != -1)
-        return dp[remWt];
-
-    int n = items.size();
-    int maxVal = 0;
-    for (int i = 0; i < n; i++) {
-        if (remWt - items[i].first < 0)
-            continue;
-        maxVal = max(maxVal, items[i].second +
-                                 findMaxVal(items, dp, remWt - items[i].first));
-    }
-    return dp[remWt] = maxVal;
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int n, W;
-    cin >> n >> W;
-    vector<pair<int, int>> items(n);
-    for (auto &x : items)
-        cin >> x.second;
-    for (auto &x : items)
-        cin >> x.first;
-
-    vector<int> dp(W + 1, -1);
-
-    cout << findMaxVal(items, dp, W);
-
+    int T;
+    cin >> T;
+    while (T--) {
+        int n;
+        cin >> n;
+        vector<int> nums(n);
+        for (auto &x : nums)
+            cin >> x;
+        ll oddSum = 0;
+        ll evenSum = 0;
+        for (int i = 0; i < n; i++) {
+            if (i % 2 == 1) {
+                oddSum += nums[i];
+            } else {
+                evenSum += nums[i];
+            }
+        }
+        bool oddGreater = oddSum > evenSum;
+        for (int i = 0; i < n; i++) {
+            if (i % 2 == oddGreater) {
+                cout << nums[i] << " ";
+            } else {
+                cout << 1 << " ";
+            }
+        }
+        cout << "\n";
+    }
     return 0;
 }

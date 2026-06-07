@@ -40,26 +40,42 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
+int dp[int(1e6) + 1];
+
+int findMinCoins(int x, vector<int> &c) {
+    if (x < 0)
+        return -1;
+    if (x == 0)
+        return 0;
+    if (dp[x] != -2)
+        return dp[x];
+    int minCoins = -1;
+    for (int i = 0; i < c.size(); i++) {
+        int subres = findMinCoins(x - c[i], c);
+        if (subres == -1)
+            continue;
+        if (minCoins == -1)
+            minCoins = 1 + subres;
+        else
+            minCoins = min(minCoins, 1 + subres);
+    }
+    return dp[x] = minCoins;
+}
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
-        long long totalSum = accumulate(nums.begin(), nums.end(), 0LL);
-        h %= totalSum;
-        int curr = 0;
-        for (int i = 0; i < n; i++) {
-            curr += nums[i];
-            if (curr >= h) {
-                        }
-        }
-    }
+    fill((int *)begin(dp), (int *)end(dp), -2);
+
+    int n, x;
+    cin >> n >> x;
+
+    vector<int> c(n);
+    for (auto &x : c)
+        cin >> x;
+
+    cout << findMinCoins(x, c);
+
     return 0;
 }

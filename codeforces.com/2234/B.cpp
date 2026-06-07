@@ -47,18 +47,16 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
-        long long totalSum = accumulate(nums.begin(), nums.end(), 0LL);
-        h %= totalSum;
-        int curr = 0;
-        for (int i = 0; i < n; i++) {
-            curr += nums[i];
-            if (curr >= h) {
-                        }
+        long long n;
+        cin >> n;
+        int r = n % 12;
+        if (r <= 9 || r == 11)
+            cout << r << " " << n - r << "\n";
+        else {
+            if (n == 10)
+                cout << -1 << "\n";
+            else
+                cout << 22 << " " << n - 22 << "\n";
         }
     }
     return 0;

@@ -40,26 +40,35 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
+int dp[1000][1000];
+int MOD = 1e9 + 7;
+
+int findNumPaths(vector<string> &grid, int x, int y) {
+    if (x >= grid.size() || y >= grid.size() || grid[y][x] == '*')
+        return 0;
+    if (x == grid.size() - 1 && y == grid.size() - 1)
+        return 1;
+    if (dp[x][y] != -1)
+        return dp[x][y];
+    return dp[x][y] =
+               (findNumPaths(grid, x + 1, y) + findNumPaths(grid, x, y + 1)) %
+               MOD;
+}
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
-        long long totalSum = accumulate(nums.begin(), nums.end(), 0LL);
-        h %= totalSum;
-        int curr = 0;
-        for (int i = 0; i < n; i++) {
-            curr += nums[i];
-            if (curr >= h) {
-                        }
-        }
-    }
+    int n;
+    cin >> n;
+
+    vector<string> grid(n);
+    for (auto &x : grid)
+        cin >> x;
+
+    fill((int *)begin(dp), (int *)end(dp), -1);
+
+    cout << findNumPaths(grid, 0, 0);
+
     return 0;
 }

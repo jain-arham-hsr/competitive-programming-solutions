@@ -44,22 +44,35 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
-        long long totalSum = accumulate(nums.begin(), nums.end(), 0LL);
-        h %= totalSum;
-        int curr = 0;
-        for (int i = 0; i < n; i++) {
-            curr += nums[i];
-            if (curr >= h) {
-                        }
+    int n;
+    cin >> n;
+
+    vector<int> parents(n - 1);
+    for (auto &x : parents)
+        cin >> x;
+
+    vector<int> numChildren(n + 1);
+    for (int i = 0; i < n - 1; i++) {
+        numChildren[parents[i]]++;
+    }
+
+    vector<int> leafChildren(n + 1);
+
+    for (int i = 0; i < n - 1; i++) {
+        if (numChildren[i + 2] == 0) {
+            leafChildren[parents[i]]++;
         }
     }
+
+    int ok = true;
+    for (int i = 1; i <= n; i++) {
+        if (numChildren[i] != 0 && leafChildren[i] < 3) {
+            ok = false;
+            break;
+        }
+    }
+
+    cout << (ok ? "YES" : "NO") << "\n";
+
     return 0;
 }

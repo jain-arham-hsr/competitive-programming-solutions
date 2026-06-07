@@ -44,22 +44,23 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
-        long long totalSum = accumulate(nums.begin(), nums.end(), 0LL);
-        h %= totalSum;
-        int curr = 0;
-        for (int i = 0; i < n; i++) {
-            curr += nums[i];
-            if (curr >= h) {
-                        }
-        }
+    int n;
+    cin >> n;
+
+    vector<int> a(n);
+    vector<int> b(n);
+    for (auto &x : a)
+        cin >> x;
+    for (auto &x : b)
+        cin >> x;
+
+    bool ok = true;
+    for (int i = 0; i < n; i++) {
+        if (b[a[i] - 1] != i + 1)
+            ok = false;
     }
+
+    cout << (ok ? "Yes" : "No");
+
     return 0;
 }

@@ -40,26 +40,35 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
+int MOD = 1e9 + 7;
+
+ll findNumWays(vector<int> &dp, int n) {
+    if (n < 0)
+        return 0;
+    if (n == 0)
+        return 1;
+    if (dp[n] != -1)
+        return dp[n];
+    ll numWays = 0;
+    numWays = (numWays + findNumWays(dp, n - 1)) % MOD;
+    numWays = (numWays + findNumWays(dp, n - 2)) % MOD;
+    numWays = (numWays + findNumWays(dp, n - 3)) % MOD;
+    numWays = (numWays + findNumWays(dp, n - 4)) % MOD;
+    numWays = (numWays + findNumWays(dp, n - 5)) % MOD;
+    numWays = (numWays + findNumWays(dp, n - 6)) % MOD;
+    return dp[n] = numWays;
+}
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
-        long long totalSum = accumulate(nums.begin(), nums.end(), 0LL);
-        h %= totalSum;
-        int curr = 0;
-        for (int i = 0; i < n; i++) {
-            curr += nums[i];
-            if (curr >= h) {
-                        }
-        }
-    }
+    int n;
+    cin >> n;
+
+    vector<int> dp(n + 1, -1);
+
+    cout << findNumWays(dp, n);
+
     return 0;
 }

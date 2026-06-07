@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+typedef long long ll;
 
 template <typename A, typename B>
 ostream &operator<<(ostream &os, const pair<A, B> &p) {
@@ -39,97 +40,113 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
+pair<pair<int, char>, pair<int, char>> dp[1001][1001];
+
+pair<pair<int, char>, pair<int, char>>
+findLeastTwoFive(vector<vector<int>> &grid, int x, int y) {
+
+    if (dp[x][y].first.first != -1)
+        return dp[x][y];
+
+    int val = grid[y][x];
+    int twoPower = 0, fivePower = 0;
+    if (val == 0) {
+        twoPower = 1;
+        fivePower = 1;
+    } else {
+        while (val % 2 == 0) {
+            val /= 2;
+            twoPower++;
+        }
+        while (val % 5 == 0) {
+            val /= 5;
+            fivePower++;
+        }
+    }
+
+    if (x == grid.size() - 1 && y == grid.size() - 1) {
+        watch(y, x, twoPower, fivePower);
+        return dp[x][y] = {{twoPower, 0}, {fivePower, 0}};
+    }
+
+    pair<int, char> two = {1e9, 0};
+    pair<int, char> five = {1e9, 0};
+
+    if (x < grid.size() - 1) {
+        auto [twoR, fiveR] = findLeastTwoFive(grid, x + 1, y);
+        two = {twoR.first, 'R'};
+        five = {fiveR.first, 'R'};
+    }
+    if (y < grid.size() - 1) {
+        auto [twoD, fiveD] = findLeastTwoFive(grid, x, y + 1);
+        if (twoD.first < two.first) {
+            two = {twoD.first, 'D'};
+        }
+        if (fiveD.first < five.first) {
+            five = {fiveD.first, 'D'};
+        }
+    }
+
+    two.first += twoPower;
+    five.first += fivePower;
+    watch(y, x, two, five);
+    return dp[x][y] = {two, five};
+}
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
     int n;
     cin >> n;
-    vector<vector<int>> mat(n, vector<int>(n));
-    for (auto &row : mat) {
-        for (auto &cell : row) {
-            cin >> cell;
-        }
-    }
-    vector<vector<pair<int, int>>> pows(n, vector<pair<int, int>>(n));
+
+    fill((pair<pair<int, char>, pair<int, char>> *)begin(dp),
+         (pair<pair<int, char>, pair<int, char>> *)end(dp),
+         pair<pair<int, char>, pair<int, char>>{{-1, 0}, {-1, 0}});
+
+    bool zeroExists = false;
+    int zeroX = -1;
+
+    vector<vector<int>> grid(n, vector<int>(n));
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            int twos = 0;
-            int fives = 0;
-            int k = mat[i][j];
-            while (k % 2 == 0) {
-                twos++;
-                k /= 2;
-            }
-            while (k % 5 == 0) {
-                fives++;
-                k /= 5;
-            }
-            pows[i][j] = {twos, fives};
-        }
-    }
-    vector<vector<pair<string, pair<int, int>>>> dp(
-        n, vector<pair<string, pair<int, int>>>(n));
-
-    dp[0][0] = {"", pows[0][0]};
-
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            pair<string, pair<int, int>> top, left;
-            pair<int, int> curr = pows[i][j];
-            if (i > 0)
-                top = dp[i - 1][j];
-            if (j > 0)
-                left = dp[i][j - 1];
-            // if (i > 0)
-            //     sumTop = min(dp[i - 1][j].second.first + pows[i][j].first,
-            //                  dp[i - 1][j].second.second + pows[i][j].second);
-            // if (j > 0)
-            //     sumLeft = min(dp[i][j - 1].second.first + pows[i][j].first,
-            //                   dp[i][j - 1].second.second +
-            //                   pows[i][j].second);
-            if (i > 0 && j > 0) {
-                if (min(top.second.first + curr.first,
-                        top.second.second + curr.second) <
-                    min(left.second.first + curr.first,
-                        left.second.second + curr.second)) {
-                    dp[i][j] = {top.first + "D",
-                                {top.second.first + curr.first,
-                                 top.second.second + curr.second}};
-                } else if (min(top.second.first + curr.first,
-                               top.second.second + curr.second) >
-                           min(left.second.first + curr.first,
-                               left.second.second + curr.second)) {
-                    dp[i][j] = {left.first + "R",
-                                {left.second.first + curr.first,
-                                 left.second.second + curr.second}};
-                } else {
-                    if (top.second.first + top.second.second >
-                        left.second.first + left.second.second) {
-                        dp[i][j] = {left.first + "R",
-                                    {left.second.first + curr.first,
-                                     left.second.second + curr.second}};
-                    } else {
-                        dp[i][j] = {top.first + "D",
-                                    {top.second.first + curr.first,
-                                     top.second.second + curr.second}};
-                    }
-                }
-            } else if (j > 0) {
-                dp[i][j] = {left.first + "R",
-                            {left.second.first + curr.first,
-                             left.second.second + curr.second}};
-            } else if (i > 0) {
-                dp[i][j] = {top.first + "D",
-                            {top.second.first + curr.first,
-                             top.second.second + curr.second}};
+            int num;
+            cin >> num;
+            grid[i][j] = num;
+            if (num == 0) {
+                zeroExists = true;
+                zeroX = j;
             }
         }
     }
-    // watch(dp[n - 1][n - 1]);
-    cout << min(dp[n - 1][n - 1].second.first, dp[n - 1][n - 1].second.second)
-         << "\n"
-         << dp[n - 1][n - 1].first;
+
+    auto [two, five] = findLeastTwoFive(grid, 0, 0);
+
+    watch(two, five);
+
+    if (!zeroExists || min(two.first, five.first) < 1) {
+        bool useTwo = two.first <= five.first;
+        cout << (useTwo ? two.first : five.first) << "\n";
+
+        int curX = 0, curY = 0;
+        string path = "";
+        while (curX != n - 1 || curY != n - 1) {
+            char move = useTwo ? dp[curX][curY].first.second
+                               : dp[curX][curY].second.second;
+            path += move;
+            if (move == 'R')
+                curX++;
+            else
+                curY++;
+        }
+        cout << path << "\n";
+    } else {
+        cout << 1 << "\n";
+        string a(zeroX, 'R');
+        string b(n - 1, 'D');
+        string c(n - 1 - zeroX, 'R');
+        cout << a + b + c;
+    }
 
     return 0;
 }

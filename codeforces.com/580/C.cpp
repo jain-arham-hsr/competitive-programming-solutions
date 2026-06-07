@@ -44,22 +44,54 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
-        long long totalSum = accumulate(nums.begin(), nums.end(), 0LL);
-        h %= totalSum;
-        int curr = 0;
-        for (int i = 0; i < n; i++) {
-            curr += nums[i];
-            if (curr >= h) {
-                        }
-        }
+    int n, m;
+    cin >> n >> m;
+    vector<bool> catExists(n + 1);
+    for (int i = 1; i <= n; i++) {
+        bool exists;
+        cin >> exists;
+        catExists[i] = exists;
     }
+
+    vector<vector<int>> adjList(n + 1);
+
+    for (int i = 0; i < n - 1; i++) {
+        int a, b;
+        cin >> a >> b;
+        adjList[a].push_back(b);
+        adjList[b].push_back(a);
+    }
+
+    queue<int> q;
+    q.push(1);
+
+    vector<int> numCats(n + 1);
+
+    if (catExists[1])
+        numCats[1] = 1;
+
+    int res = 0;
+
+    vector<int> vst(n + 1);
+
+    while (q.size()) {
+        int vert = q.front();
+        vst[vert] = true;
+        bool isLeaf = true;
+        for (auto vert2 : adjList[vert]) {
+            if (!vst[vert2]) {
+                q.push(vert2);
+                if (catExists[vert2] || numCats[vert] > m)
+                    numCats[vert2] = numCats[vert] + catExists[vert2];
+                isLeaf = false;
+            }
+        }
+        if (isLeaf && numCats[vert] <= m)
+            res++;
+        q.pop();
+    }
+
+    cout << res;
+
     return 0;
 }

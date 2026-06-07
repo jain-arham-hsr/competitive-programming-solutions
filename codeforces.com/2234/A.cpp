@@ -47,19 +47,21 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
+        int n;
+        cin >> n;
         vector<int> nums(n);
         for (auto &x : nums)
             cin >> x;
-        long long totalSum = accumulate(nums.begin(), nums.end(), 0LL);
-        h %= totalSum;
-        int curr = 0;
-        for (int i = 0; i < n; i++) {
-            curr += nums[i];
-            if (curr >= h) {
-                        }
+        sort(nums.rbegin(), nums.rend());
+        bool valid = true;
+        for (int i = 2; i < n; i++) {
+            if (nums[i - 2] % nums[i - 1] != nums[i])
+                valid = false;
         }
+        if (!valid)
+            cout << -1 << "\n";
+        else
+            cout << nums[0] << " " << nums[1] << "\n";
     }
     return 0;
 }

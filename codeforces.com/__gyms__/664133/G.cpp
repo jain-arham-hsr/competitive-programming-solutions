@@ -1,42 +1,79 @@
 #include <bits/stdc++.h>
 using namespace std;
+typedef long long ll;
+
+template <typename A, typename B>
+ostream &operator<<(ostream &os, const pair<A, B> &p) {
+    return os << "(" << p.first << ", " << p.second << ")";
+}
+
+ostream &operator<<(ostream &os, const string &s) {
+    for (char c : s)
+        os << c;
+    return os;
+}
+
+template <typename T, typename = typename T::iterator>
+ostream &operator<<(ostream &os, const T &c) {
+    os << "{";
+    bool f = true;
+    for (auto &x : c)
+        os << (f ? f = false, "" : ", ") << x;
+    return os << "}";
+}
+
+void debug_out() { cerr << "\n"; }
+template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
+    cerr << h;
+    if constexpr (sizeof...(t))
+        cerr << ", ";
+    debug_out(forward<T>(t)...);
+}
+
+#ifdef DEBUGGER
+#define watch(...)                                                             \
+    cerr << __func__ << ":" << __LINE__ << " | " << #__VA_ARGS__ << " = ",     \
+        debug_out(__VA_ARGS__)
+#else
+#define watch(...) ((void)0)
+#endif
+
+// ==================================================================== //
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    long long n, k;
+    int n;
+    long long k;
     cin >> n >> k;
-    vector<long long> nums(n);
-    for (auto &x : nums)
+
+    vector<long long> a(n);
+    for (auto &x : a)
         cin >> x;
-    long long currSum = nums[0];
-    int l = 1;
-    while (l < n && k - currSum >= nums[l]) {
-        currSum += nums[l];
-        l++;
-    }
-    int r = l;
-    // cout << "l: " << l << "\n";
-    if (r != n) {
-        if (r % 2 == 0) {
-            r -= 2;
+
+    vector<long long> prefSum(n + 1);
+    partial_sum(a.begin(), a.end(), prefSum.begin() + 1);
+
+    int l = -1, r = n + 1;
+    while (l < r - 1) {
+        int mid = l + (r - l) / 2;
+        bool valid = true;
+        for (int i = 1; i <= n; i++) {
+            long long sum =
+                prefSum[min(n, i + mid)] - prefSum[max(1, i - mid) - 1];
+            if (sum > k) {
+                valid = false;
+                break;
+            }
         }
-        r /= 2;
+        if (!valid)
+            r = mid;
+        else
+            l = mid;
     }
-    // cout << "r: " << r << "\n";
-    for (int i = l; i < n; i++) {
-        // cout << currSum << "\n";
-        if (i - 2 * r - 1 >= 0)
-            currSum -= nums[i - 2 * r - 1];
-        while (r >= 0 && k - currSum < nums[i]) {
-            r--;
-            cout << r << "\n";
-            if (i - 2 * r - 1 >= 0)
-                currSum -= nums[i - 2 * r - 1];
-        }
-        currSum += nums[i];
-    }
-    cout << r;
+
+    cout << l;
+
     return 0;
 }

@@ -44,22 +44,39 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
-        long long totalSum = accumulate(nums.begin(), nums.end(), 0LL);
-        h %= totalSum;
-        int curr = 0;
-        for (int i = 0; i < n; i++) {
-            curr += nums[i];
-            if (curr >= h) {
-                        }
-        }
+    int n, k, m;
+    cin >> n >> k >> m;
+
+    vector<pair<int, int>> gems(n);
+
+    for (int i = 0; i < n; i++) {
+        int c, v;
+        cin >> c >> v;
+        gems.push_back({v, c});
     }
+    sort(gems.rbegin(), gems.rend());
+
+    map<int, bool> inc;
+    vector<bool> used(n);
+
+    long long res = 0;
+
+    watch(gems);
+    for (int i = 0; i < n; i++) {
+        if (used[i] || (inc[gems[i].second] && m > 0))
+            continue;
+        res += gems[i].first;
+        used[i] = true;
+        inc[gems[i].second] = true;
+        m--;
+        k--;
+        if (m == 0)
+            i = 0;
+        if (k == 0)
+            break;
+    }
+
+    cout << res << "\n";
+
     return 0;
 }

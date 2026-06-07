@@ -40,26 +40,39 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
+int dp[int(1e6) + 1];
+
+int findMinSteps(int n) {
+    if (n == 0)
+        return 0;
+    if (n < 0)
+        return -1;
+    if (dp[n] != -2)
+        return dp[n];
+    int minSteps = INT_MAX;
+    int nCopy = n;
+    while (nCopy > 0) {
+        int dig = nCopy % 10;
+        nCopy /= 10;
+        if (dig == 0)
+            continue;
+        int subRes = findMinSteps(n - dig);
+        if (subRes != -1)
+            minSteps = min(minSteps, 1 + subRes);
+    }
+    return dp[n] = minSteps;
+}
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
-        long long totalSum = accumulate(nums.begin(), nums.end(), 0LL);
-        h %= totalSum;
-        int curr = 0;
-        for (int i = 0; i < n; i++) {
-            curr += nums[i];
-            if (curr >= h) {
-                        }
-        }
-    }
+    fill((int *)begin(dp), (int *)end(dp), -2);
+
+    int n;
+    cin >> n;
+
+    cout << findMinSteps(n);
+
     return 0;
 }

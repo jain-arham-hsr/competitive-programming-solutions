@@ -40,26 +40,54 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
+int dp[1001][101][2];
+
+int findMaxProfit(vector<int> &diff, int curr, int k, bool holding) {
+    if (curr == diff.size() || k == 0)
+        return 0;
+
+    if (dp[curr][k][holding] != -1)
+        return dp[curr][k][holding];
+
+    int maxProfit = 0;
+
+    if (holding) {
+        maxProfit = max(maxProfit, diff[curr] + findMaxProfit(diff, curr + 1,
+                                                              k - 1, !holding));
+        maxProfit = max(maxProfit,
+                        diff[curr] + findMaxProfit(diff, curr + 1, k, holding));
+    } else {
+        maxProfit = max(maxProfit, findMaxProfit(diff, curr + 1, k, !holding));
+        maxProfit = max(maxProfit, findMaxProfit(diff, curr + 1, k, holding));
+    }
+
+    return dp[curr][k][holding] = maxProfit;
+}
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
-        long long totalSum = accumulate(nums.begin(), nums.end(), 0LL);
-        h %= totalSum;
-        int curr = 0;
-        for (int i = 0; i < n; i++) {
-            curr += nums[i];
-            if (curr >= h) {
-                        }
-        }
+    int n, k;
+    cin >> n >> k;
+
+    vector<int> a(n);
+    for (auto &x : a)
+        cin >> x;
+
+    if (n == 1) {
+        cout << 0;
+        return 0;
     }
+
+    fill((int *)begin(dp), (int *)end(dp), -1);
+
+    vector<int> diff(n);
+    for (int i = 1; i < n; i++) {
+        diff[i] = a[i] - a[i - 1];
+    }
+
+    cout << findMaxProfit(diff, 0, k, false);
+
     return 0;
 }

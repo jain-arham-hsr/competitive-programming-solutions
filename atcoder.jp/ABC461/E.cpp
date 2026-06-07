@@ -44,21 +44,21 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
-        long long totalSum = accumulate(nums.begin(), nums.end(), 0LL);
-        h %= totalSum;
-        int curr = 0;
-        for (int i = 0; i < n; i++) {
-            curr += nums[i];
-            if (curr >= h) {
-                        }
+    int n, q;
+    cin >> n;
+
+    vector<int> whitesTillRow(n);
+
+    int whitesTillNow = 0;
+
+    while (q--) {
+        int type, num;
+        cin >> type >> num;
+        num--;
+        if (type == 1) {
+            whitesTillRow[num] = whitesTillNow;
+        } else {
+            whitesTillNow++;
         }
     }
     return 0;

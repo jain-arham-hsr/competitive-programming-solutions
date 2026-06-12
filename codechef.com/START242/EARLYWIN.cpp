@@ -40,24 +40,6 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-void fillWater(vector<int> &h, vector<int> &lvl, int startInd) {
-    int n = h.size();
-    lvl[startInd] = 0;
-    int maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd + i) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd + i + 1) % n] = maxH;
-    }
-    maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd - i - 1 + n) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd - 1 - i + n) % n] =
-            min(lvl[(startInd - 1 - i + n) % n], maxH);
-    }
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
@@ -65,21 +47,18 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
-
-        vector<int> h(n);
-        for (auto &x : h)
-            cin >> x;
-
-        vector<int> lvl(n, -1);
-
-        for (int i = 0; i < n; i++) {
-            fillWater(h, lvl, i);
-            cout << accumulate(lvl.begin(), lvl.end(), 0LL) << " ";
-            fill(lvl.begin(), lvl.end(), -1);
+        int n, m;
+        cin >> n >> m;
+        string a, b;
+        cin >> a >> b;
+        string res = "";
+        for (int i = 0; i < min(n, m); i++) {
+            if (a[i] == b[i])
+                res += a[i];
+            else
+                break;
         }
-        cout << "\n";
+        cout << res << "\n";
     }
     return 0;
 }

@@ -40,46 +40,60 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-void fillWater(vector<int> &h, vector<int> &lvl, int startInd) {
-    int n = h.size();
-    lvl[startInd] = 0;
-    int maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd + i) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd + i + 1) % n] = maxH;
-    }
-    maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd - i - 1 + n) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd - 1 - i + n) % n] =
-            min(lvl[(startInd - 1 - i + n) % n], maxH);
-    }
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n;
-        cin >> n;
+    int h, w, k;
+    cin >> h >> w >> k;
 
-        vector<int> h(n);
-        for (auto &x : h)
-            cin >> x;
+    vector<string> grid(h);
+    for (auto &x : grid)
+        cin >> x;
 
-        vector<int> lvl(n, -1);
+    watch(grid);
 
-        for (int i = 0; i < n; i++) {
-            fillWater(h, lvl, i);
-            cout << accumulate(lvl.begin(), lvl.end(), 0LL) << " ";
-            fill(lvl.begin(), lvl.end(), -1);
+    vector<vector<int>> partSum(h + 1, vector<int>(w + 1, 0));
+
+    for (int i = 0; i < h; i++) {
+        int currSum = 0;
+        for (int j = 0; j < w; j++) {
+            currSum += grid[i][j] - '0';
+            partSum[i + 1][j + 1] = currSum;
         }
-        cout << "\n";
     }
+
+    watch(partSum);
+
+    for (int j = 0; j <= w; j++) {
+        int currSum = 0;
+        for (int i = 0; i <= h; i++) {
+            currSum += partSum[i][j];
+            partSum[i][j] = currSum;
+        }
+    }
+
+    watch(partSum);
+
+    long long res = 0;
+
+    vector<int> freq(2500001);
+    for (int c1 = 0; c1 < h; c1++) {
+        for (int c2 = c1 + 1; c2 <= h; c2++) {
+            for (int i = 0; i <= w; i++) {
+                if (partSum[c2][i] - partSum[c1][i] >= k)
+                    res += freq[partSum[c2][i] - partSum[c1][i] - k];
+                freq[partSum[c2][i] - partSum[c1][i]]++;
+            }
+
+            for (int i = 0; i <= w; i++) {
+                int current_sum = partSum[c2][i] - partSum[c1][i];
+                freq[current_sum]--;
+            }
+        }
+    }
+
+    cout << res;
+
     return 0;
 }

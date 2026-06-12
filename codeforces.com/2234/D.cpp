@@ -40,24 +40,6 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-void fillWater(vector<int> &h, vector<int> &lvl, int startInd) {
-    int n = h.size();
-    lvl[startInd] = 0;
-    int maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd + i) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd + i + 1) % n] = maxH;
-    }
-    maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd - i - 1 + n) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd - 1 - i + n) % n] =
-            min(lvl[(startInd - 1 - i + n) % n], maxH);
-    }
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
@@ -65,21 +47,62 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
+        int n, k;
+        cin >> n >> k;
 
-        vector<int> h(n);
-        for (auto &x : h)
-            cin >> x;
+        string strA, strB;
+        cin >> strA >> strB;
 
-        vector<int> lvl(n, -1);
+        int a = 1;
+        int b = 2;
+        int x = 3;
+
+        long long total_slots = 1LL << k;
+        long long cntA = (total_slots + 2) / 3;
+        long long cntX = (total_slots + 1) / 3;
+        long long cntB = (total_slots) / 3 + 1;
+
+        long long aProd, bProd, xProd;
+
+        long long setBits = 0;
+        long long unsetBits = 0;
 
         for (int i = 0; i < n; i++) {
-            fillWater(h, lvl, i);
-            cout << accumulate(lvl.begin(), lvl.end(), 0LL) << " ";
-            fill(lvl.begin(), lvl.end(), -1);
+            if (strA[i] == '1')
+                setBits++;
+            else
+                unsetBits++;
         }
-        cout << "\n";
+
+        aProd = setBits * unsetBits;
+
+        setBits = 0;
+        unsetBits = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (strB[i] == '1')
+                setBits++;
+            else
+                unsetBits++;
+        }
+
+        bProd = setBits * unsetBits;
+
+        setBits = 0;
+        unsetBits = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (strA[i] != strB[i])
+                setBits++;
+            else
+                unsetBits++;
+        }
+
+        xProd = setBits * unsetBits;
+
+        long long res = (cntA * aProd) + (cntB * bProd) + (cntX * xProd);
+
+        cout << res << "\n";
     }
     return 0;
 }

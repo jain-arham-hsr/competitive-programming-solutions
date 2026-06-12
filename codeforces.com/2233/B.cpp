@@ -40,24 +40,6 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-void fillWater(vector<int> &h, vector<int> &lvl, int startInd) {
-    int n = h.size();
-    lvl[startInd] = 0;
-    int maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd + i) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd + i + 1) % n] = maxH;
-    }
-    maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd - i - 1 + n) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd - 1 - i + n) % n] =
-            min(lvl[(startInd - 1 - i + n) % n], maxH);
-    }
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
@@ -68,18 +50,24 @@ int main() {
         int n;
         cin >> n;
 
-        vector<int> h(n);
-        for (auto &x : h)
-            cin >> x;
-
-        vector<int> lvl(n, -1);
-
-        for (int i = 0; i < n; i++) {
-            fillWater(h, lvl, i);
-            cout << accumulate(lvl.begin(), lvl.end(), 0LL) << " ";
-            fill(lvl.begin(), lvl.end(), -1);
+        if (n == 2)
+            cout << "2 1 1 2 2 1 2 1";
+        else if (n == 3)
+            cout << "1 1 2 1 2 3 1 3 2 2 3 3";
+        else {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 1; j <= n - i; j++) {
+                    cout << j << " ";
+                }
+            }
+            for (int i = 2; i >= 0; i--) {
+                for (int j = n - i; j <= n; j++) {
+                    cout << j << " ";
+                }
+            }
         }
         cout << "\n";
     }
+
     return 0;
 }

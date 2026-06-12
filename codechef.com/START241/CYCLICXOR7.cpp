@@ -40,22 +40,18 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-void fillWater(vector<int> &h, vector<int> &lvl, int startInd) {
-    int n = h.size();
-    lvl[startInd] = 0;
-    int maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd + i) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd + i + 1) % n] = maxH;
+int MOD = 998244353;
+
+long long power(long long base, long long exp, long long mod) {
+    long long result = 1;
+    base %= mod;
+    while (exp > 0) {
+        if (exp & 1)
+            result = result * base % mod;
+        base = base * base % mod;
+        exp >>= 1;
     }
-    maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd - i - 1 + n) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd - 1 - i + n) % n] =
-            min(lvl[(startInd - 1 - i + n) % n], maxH);
-    }
+    return result;
 }
 
 int main() {
@@ -65,21 +61,17 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
+        long long n;
+        int k;
+        cin >> n >> k;
 
-        vector<int> h(n);
-        for (auto &x : h)
-            cin >> x;
-
-        vector<int> lvl(n, -1);
-
-        for (int i = 0; i < n; i++) {
-            fillWater(h, lvl, i);
-            cout << accumulate(lvl.begin(), lvl.end(), 0LL) << " ";
-            fill(lvl.begin(), lvl.end(), -1);
+        if (n % 3 != 0) {
+            cout << 1 << "\n";
+        } else {
+            long long g = gcd(n, 1LL << k);
+            long long exp = 2LL * g * k;
+            cout << power(2, exp, MOD) << "\n";
         }
-        cout << "\n";
     }
     return 0;
 }

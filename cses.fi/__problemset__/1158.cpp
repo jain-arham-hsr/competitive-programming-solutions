@@ -40,46 +40,58 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-void fillWater(vector<int> &h, vector<int> &lvl, int startInd) {
-    int n = h.size();
-    lvl[startInd] = 0;
-    int maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd + i) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd + i + 1) % n] = maxH;
-    }
-    maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd - i - 1 + n) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd - 1 - i + n) % n] =
-            min(lvl[(startInd - 1 - i + n) % n], maxH);
-    }
+// int dp[1001][int(1e5) + 1];
+int dp[5][11];
+
+int findMaxPages(vector<int> &h, vector<int> &s, int i, int x) {
+    if (i >= h.size() || x == 0)
+        return 0;
+    if (dp[i][x] != -1)
+        return dp[i][x];
+    int maxPages = 0;
+    if (h[i] <= x)
+        maxPages = max(maxPages, s[i] + findMaxPages(h, s, i + 1, x - h[i]));
+    maxPages = max(maxPages, findMaxPages(h, s, i + 1, x));
+    return dp[i][x] = maxPages;
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n;
-        cin >> n;
+    int n, x;
+    cin >> n >> x;
 
-        vector<int> h(n);
-        for (auto &x : h)
-            cin >> x;
+    vector<int> h(n);
+    for (auto &x : h)
+        cin >> x;
+    vector<int> s(n);
+    for (auto &x : s)
+        cin >> x;
 
-        vector<int> lvl(n, -1);
+    fill((int *)begin(dp), (int *)end(dp), -1);
 
-        for (int i = 0; i < n; i++) {
-            fillWater(h, lvl, i);
-            cout << accumulate(lvl.begin(), lvl.end(), 0LL) << " ";
-            fill(lvl.begin(), lvl.end(), -1);
+    // vector<vector<int>> dp(n, vector<int>(x + 1, 0));
+
+    // dp[0][0] = 0;
+
+    // for (int i = 0; i < n; i++) {
+    //     for (int j = 0; j <= x; j++) {
+    //         if (j + h[i] <= x)
+    //             dp[i][j + h[i]] = max(dp[i][j] + s[i], dp[i][j + h[i]]);
+    //     }
+    // }
+
+    // cout << dp[n - 1][x];
+
+    cout << findMaxPages(h, s, 0, x) << "\n";
+
+    for (int i = 0; i <= n; i++) {
+        for (int j = 0; j <= x; j++) {
+            cout << dp[i][j] << " ";
         }
         cout << "\n";
     }
+
     return 0;
 }

@@ -46,7 +46,27 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        // code here
+        string s;
+        cin >> s;
+        if (s.size() == 1) {
+            cout << "YES\n";
+            continue;
+        }
+        bool isAlternating = true;
+        int countC = 0, countA = 0;
+        for (int i = 0; i < s.size(); i++) {
+            if (i >= 1 && s[i] == s[i - 1])
+                isAlternating = false;
+            if (s[i] == 'C')
+                countC++;
+            else
+                countA++;
+        }
+        if ((countC + 2 * countA) % 3 == 0 || isAlternating) {
+            cout << "NO\n";
+        } else {
+            cout << "YES\n";
+        }
     }
     return 0;
 }

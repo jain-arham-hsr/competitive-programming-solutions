@@ -40,46 +40,29 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-void fillWater(vector<int> &h, vector<int> &lvl, int startInd) {
-    int n = h.size();
-    lvl[startInd] = 0;
-    int maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd + i) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd + i + 1) % n] = maxH;
-    }
-    maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd - i - 1 + n) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd - 1 - i + n) % n] =
-            min(lvl[(startInd - 1 - i + n) % n], maxH);
-    }
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n;
-        cin >> n;
+    int n, t;
+    cin >> n >> t;
 
-        vector<int> h(n);
-        for (auto &x : h)
-            cin >> x;
+    vector<long long> nums(n);
+    for (auto &x : nums)
+        cin >> x;
 
-        vector<int> lvl(n, -1);
+    vector<long long> prefSum(n + 1);
+    partial_sum(nums.begin(), nums.end(), prefSum.begin() + 1);
 
-        for (int i = 0; i < n; i++) {
-            fillWater(h, lvl, i);
-            cout << accumulate(lvl.begin(), lvl.end(), 0LL) << " ";
-            fill(lvl.begin(), lvl.end(), -1);
-        }
-        cout << "\n";
+    int maxBooks = 0;
+    int l = 0;
+    for (int r = 0; r <= n; r++) {
+        while (prefSum[r] - prefSum[l] > t)
+            l++;
+        maxBooks = max(maxBooks, r - l);
     }
+
+    cout << maxBooks;
+
     return 0;
 }

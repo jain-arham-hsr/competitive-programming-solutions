@@ -40,15 +40,15 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-struct SegTree {
+template <typename T> struct SegTree {
     int n;
-    vector<int> tree;
+    vector<T> tree;
 
-    SegTree(int n, vector<int> &arr) : n(n), tree(4 * n) {
+    SegTree(int n, vector<T> &arr) : n(n), tree(4 * n) {
         build(1, 0, n - 1, arr);
     }
 
-    void build(int node, int start, int end, vector<int> &arr) {
+    void build(int node, int start, int end, vector<T> &arr) {
         if (start == end) {
             tree[node] = arr[start];
             return;
@@ -59,7 +59,7 @@ struct SegTree {
         tree[node] = combine(tree[2 * node], tree[2 * node + 1]);
     }
 
-    void update(int node, int start, int end, int idx, int val) {
+    void update(int node, int start, int end, int idx, T val) {
         if (start == end) {
             tree[node] = val;
             return;
@@ -72,7 +72,7 @@ struct SegTree {
         tree[node] = combine(tree[2 * node], tree[2 * node + 1]);
     }
 
-    int query(int node, int start, int end, int l, int r) {
+    T query(int node, int start, int end, int l, int r) {
         if (r < start || end < l)
             return identity();
         if (l <= start && end <= r)
@@ -82,14 +82,15 @@ struct SegTree {
                        query(2 * node + 1, mid + 1, end, l, r));
     }
 
-    // ── change these two for sum / min / max ─────────────────────────────────
-    int combine(int a, int b) { return a + b; }
-    int identity() { return 0; } // 0 for sum, INT_MAX for min, INT_MIN for max
+    // ── change these for sum / min / max
+    // ──────────────────────────────────────
+    T combine(T a, T b) { return a + b; }
+    T identity() { return T(0); } // 0 for sum, INT_MAX for min, INT_MIN for max
 
     // ── public interface
-    // ──────────────────────────────────────────────────────
-    void update(int idx, int val) { update(1, 0, n - 1, idx, val); }
-    int query(int l, int r) { return query(1, 0, n - 1, l, r); }
+    // ───────────────────────────────────────────────────────
+    void update(int idx, T val) { update(1, 0, n - 1, idx, val); }
+    T query(int l, int r) { return query(1, 0, n - 1, l, r); }
 };
 
 int main() {
@@ -99,38 +100,30 @@ int main() {
     int n, q;
     cin >> n >> q;
 
-    vector<int> emptyArr(q, 0);
+    vector<int> nums(n + 1);
+    for (int i = 1; i <= n; i++) {
+        int num;
+        cin >> num;
+        nums[i] = num;
+    }
 
-    SegTree blackTime(q, emptyArr);
-    SegTree whiteTime(q, emptyArr);
+    vector<long long> diff(n + 1);
+    SegTree<long long> diffSeg(n + 1, diff);
 
-    vector<int> lastPaintedBlack(n + 1, -1);
-    vector<int> lastPaintedWhite(n + 1, -1);
-
-    long long blackCount = 0;
-
-    for (int i = 0; i < q; i++) {
-        int type, num;
-        cin >> type >> num;
-
+    while (q--) {
+        int type;
+        cin >> type;
         if (type == 1) {
-            int whiteCnt = whiteTime.query(lastPaintedBlack[num] + 1, i);
-            if (lastPaintedBlack[num] != -1) {
-                blackTime.update(lastPaintedBlack[num], 0);
-            } else {
-                whiteCnt = n;
-            }
-            blackCount += whiteCnt;
-            blackTime.update(i, 1);
-            lastPaintedBlack[num] = i;
+            int a, b, u;
+            cin >> a >> b >> u;
+            diffSeg.update(a, diffSeg.query(a, a) + u);
+            if (b < n)
+                diffSeg.update(b + 1, diffSeg.query(b + 1, b + 1) - u);
         } else {
-            if (lastPaintedWhite[num] != -1)
-                whiteTime.update(lastPaintedWhite[num], 0);
-            blackCount -= blackTime.query(lastPaintedWhite[num] + 1, i);
-            whiteTime.update(i, 1);
-            lastPaintedWhite[num] = i;
+            int k;
+            cin >> k;
+            cout << diffSeg.query(0, k) + nums[k] << "\n";
         }
-        cout << blackCount << "\n";
     }
 
     return 0;

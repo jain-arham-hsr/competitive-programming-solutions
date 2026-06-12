@@ -83,8 +83,10 @@ struct SegTree {
     }
 
     // ── change these two for sum / min / max ─────────────────────────────────
-    int combine(int a, int b) { return a + b; }
-    int identity() { return 0; } // 0 for sum, INT_MAX for min, INT_MIN for max
+    int combine(int a, int b) { return min(a, b); }
+    int identity() {
+        return INT_MAX;
+    } // 0 for sum, INT_MAX for min, INT_MIN for max
 
     // ── public interface
     // ──────────────────────────────────────────────────────
@@ -98,39 +100,20 @@ int main() {
 
     int n, q;
     cin >> n >> q;
+    vector<int> nums(n);
+    for (auto &x : nums)
+        cin >> x;
 
-    vector<int> emptyArr(q, 0);
+    SegTree numsSeg(n, nums);
 
-    SegTree blackTime(q, emptyArr);
-    SegTree whiteTime(q, emptyArr);
-
-    vector<int> lastPaintedBlack(n + 1, -1);
-    vector<int> lastPaintedWhite(n + 1, -1);
-
-    long long blackCount = 0;
-
-    for (int i = 0; i < q; i++) {
-        int type, num;
-        cin >> type >> num;
-
+    while (q--) {
+        int type, num1, num2;
+        cin >> type >> num1 >> num2;
         if (type == 1) {
-            int whiteCnt = whiteTime.query(lastPaintedBlack[num] + 1, i);
-            if (lastPaintedBlack[num] != -1) {
-                blackTime.update(lastPaintedBlack[num], 0);
-            } else {
-                whiteCnt = n;
-            }
-            blackCount += whiteCnt;
-            blackTime.update(i, 1);
-            lastPaintedBlack[num] = i;
+            numsSeg.update(num1 - 1, num2);
         } else {
-            if (lastPaintedWhite[num] != -1)
-                whiteTime.update(lastPaintedWhite[num], 0);
-            blackCount -= blackTime.query(lastPaintedWhite[num] + 1, i);
-            whiteTime.update(i, 1);
-            lastPaintedWhite[num] = i;
+            cout << numsSeg.query(num1 - 1, num2 - 1) << "\n";
         }
-        cout << blackCount << "\n";
     }
 
     return 0;

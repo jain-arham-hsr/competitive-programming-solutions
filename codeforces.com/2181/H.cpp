@@ -40,46 +40,33 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-void fillWater(vector<int> &h, vector<int> &lvl, int startInd) {
-    int n = h.size();
-    lvl[startInd] = 0;
-    int maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd + i) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd + i + 1) % n] = maxH;
-    }
-    maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd - i - 1 + n) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd - 1 - i + n) % n] =
-            min(lvl[(startInd - 1 - i + n) % n], maxH);
-    }
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n;
-        cin >> n;
+    long long w, h, d;
+    cin >> w >> h >> d;
 
-        vector<int> h(n);
-        for (auto &x : h)
-            cin >> x;
+    long long n;
+    cin >> n;
 
-        vector<int> lvl(n, -1);
+    long long rem = n;
 
-        for (int i = 0; i < n; i++) {
-            fillWater(h, lvl, i);
-            cout << accumulate(lvl.begin(), lvl.end(), 0LL) << " ";
-            fill(lvl.begin(), lvl.end(), -1);
-        }
-        cout << "\n";
+    long long gw = gcd(rem, w);
+    rem /= gw;
+
+    long long gh = gcd(rem, h);
+    rem /= gh;
+
+    long long gd = gcd(rem, d);
+    rem /= gd;
+
+    if (rem != 1) {
+        cout << -1;
+        return 0;
     }
+
+    cout << gw - 1 << " " << gh - 1 << " " << gd - 1;
+
     return 0;
 }

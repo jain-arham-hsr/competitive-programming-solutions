@@ -40,46 +40,28 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-void fillWater(vector<int> &h, vector<int> &lvl, int startInd) {
-    int n = h.size();
-    lvl[startInd] = 0;
-    int maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd + i) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd + i + 1) % n] = maxH;
-    }
-    maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd - i - 1 + n) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd - 1 - i + n) % n] =
-            min(lvl[(startInd - 1 - i + n) % n], maxH);
-    }
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n;
-        cin >> n;
+    int n;
+    cin >> n;
 
-        vector<int> h(n);
-        for (auto &x : h)
-            cin >> x;
+    vector<int> nums(n);
+    for (auto &x : nums)
+        cin >> x;
 
-        vector<int> lvl(n, -1);
-
-        for (int i = 0; i < n; i++) {
-            fillWater(h, lvl, i);
-            cout << accumulate(lvl.begin(), lvl.end(), 0LL) << " ";
-            fill(lvl.begin(), lvl.end(), -1);
+    for (int i = 1; i < n - 1; i++) {
+        if (nums[i - 1] % 2 != nums[i] % 2 && nums[i] % 2 != nums[i + 1] % 2) {
+            cout << i + 1;
+            return 0;
         }
-        cout << "\n";
     }
+
+    if (nums[0] % 2 != nums[1] % 2)
+        cout << 1;
+    else
+        cout << n;
+
     return 0;
 }

@@ -40,24 +40,6 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-void fillWater(vector<int> &h, vector<int> &lvl, int startInd) {
-    int n = h.size();
-    lvl[startInd] = 0;
-    int maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd + i) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd + i + 1) % n] = maxH;
-    }
-    maxH = 0;
-    for (int i = 0; i < n - 1; i++) {
-        int currH = h[(startInd - i - 1 + n) % n];
-        maxH = max(maxH, currH);
-        lvl[(startInd - 1 - i + n) % n] =
-            min(lvl[(startInd - 1 - i + n) % n], maxH);
-    }
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
@@ -65,21 +47,57 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
+        int n, k;
+        cin >> n >> k;
 
-        vector<int> h(n);
-        for (auto &x : h)
-            cin >> x;
+        vector<vector<int>> adjList(n + 1);
 
-        vector<int> lvl(n, -1);
-
-        for (int i = 0; i < n; i++) {
-            fillWater(h, lvl, i);
-            cout << accumulate(lvl.begin(), lvl.end(), 0LL) << " ";
-            fill(lvl.begin(), lvl.end(), -1);
+        for (int i = 0; i < n - 1; i++) {
+            int a, b;
+            cin >> a >> b;
+            adjList[a].push_back(b);
+            adjList[b].push_back(a);
         }
-        cout << "\n";
+
+        queue<int> q;
+        vector<int> degree(n + 1);
+
+        for (int i = 1; i <= n; i++) {
+            degree[i] = adjList[i].size();
+            if (degree[i] <= 1) {
+                q.push(i);
+            }
+        }
+
+        q.push(-1);
+
+        int rem = 0;
+
+        vector<int> vst(n + 1);
+
+        int lvl = 0;
+
+        while (q.size()) {
+            int curr = q.front();
+            if (curr == -1) {
+                lvl++;
+                if (rem == n || lvl == k)
+                    break;
+                q.push(-1);
+            } else {
+                for (int val : adjList[curr]) {
+                    degree[val]--;
+                    if (!vst[val] && degree[val] == 1) {
+                        q.push(val);
+                        vst[curr] = true;
+                    }
+                }
+                rem++;
+            }
+            q.pop();
+        }
+
+        cout << n - rem << "\n";
     }
     return 0;
 }

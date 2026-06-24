@@ -47,38 +47,39 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
-        vector<int> a(n);
-        for (auto &x : a)
+        int n;
+        cin >> n;
+        vector<int> nums(n);
+        for (auto &x : nums)
             cin >> x;
+        sort(nums.begin(), nums.end());
 
-        long long total = accumulate(a.begin(), a.end(), 0LL);
-        long long res = (h / total) * (n + k);
-        long long remH = h % total;
-        if (h % total == 0) {
-            res -= k;
-            cout << res << "\n";
-            continue;
+        bitset<32> matchNum(nums[0]);
+        int mostSigBit = -1;
+
+        for (int i = 0; i < 32; i++) {
+            if (matchNum[i] > 0)
+                mostSigBit = i;
         }
 
-        vector<int> prefMin(n);
-        prefMin[0] = a[0];
-        for (int i = 1; i < n; i++)
-            prefMin[i] = min(prefMin[i - 1], a[i]);
+        int res = 0;
 
-        vector<int> suffMax(n);
-        suffMax[n - 1] = a[n - 1];
-        for (int i = n - 2; i >= 0; i--)
-            suffMax[i] = max(suffMax[i + 1], a[i]);
+        for (int i = 1; i < n; i++) {
+            bitset<32> currNum(nums[i]);
+            int currMostSig = -1;
 
-        long long sum = 0;
-        for (int i = 0; i < n; i++) {
-            sum += a[i];
-            if (sum >= remH ||
-                i < n - 1 && sum - prefMin[i] + suffMax[i + 1] >= remH) {
-                res += i + 1;
-                break;
+            for (int j = 0; j < 32; j++) {
+                if (currNum[j] > 0)
+                    currMostSig = j;
+            }
+            res += currMostSig - mostSigBit;
+            for (int j = mostSigBit; j >= 0; j--) {
+                if (matchNum[j] != currNum[j + currMostSig - mostSigBit]) {
+                    res += (i + 1) * (j + 1);
+                    matchNum >>= j + 1;
+                    mostSigBit -= (j + 1);
+                    break;
+                }
             }
         }
 

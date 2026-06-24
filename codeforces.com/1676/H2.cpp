@@ -2,6 +2,10 @@
 using namespace std;
 typedef long long ll;
 
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
+
 template <typename A, typename B>
 ostream &operator<<(ostream &os, const pair<A, B> &p) {
     return os << "(" << p.first << ", " << p.second << ")";
@@ -40,6 +44,21 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
+template <typename T> class OrderedSet {
+  private:
+    tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>
+        st;
+
+  public:
+    int countElementsLessThanX(T x) { return st.order_of_key(x); }
+    int countElementsAtleastX(T x) {
+        return st.size() - countElementsLessThanX(x);
+    }
+    int getKthElement(int k) { return *st.find_by_order(k); }
+    void insert(T x) { st.insert(x); }
+    void erase(T x) { st.erase(x); }
+};
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
@@ -47,39 +66,19 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
-        vector<int> a(n);
-        for (auto &x : a)
+        int n;
+        cin >> n;
+        vector<int> nums(n);
+        for (auto &x : nums)
             cin >> x;
 
-        long long total = accumulate(a.begin(), a.end(), 0LL);
-        long long res = (h / total) * (n + k);
-        long long remH = h % total;
-        if (h % total == 0) {
-            res -= k;
-            cout << res << "\n";
-            continue;
-        }
+        long long res = 0;
 
-        vector<int> prefMin(n);
-        prefMin[0] = a[0];
-        for (int i = 1; i < n; i++)
-            prefMin[i] = min(prefMin[i - 1], a[i]);
+        OrderedSet<pair<int, int>> os;
 
-        vector<int> suffMax(n);
-        suffMax[n - 1] = a[n - 1];
-        for (int i = n - 2; i >= 0; i--)
-            suffMax[i] = max(suffMax[i + 1], a[i]);
-
-        long long sum = 0;
         for (int i = 0; i < n; i++) {
-            sum += a[i];
-            if (sum >= remH ||
-                i < n - 1 && sum - prefMin[i] + suffMax[i + 1] >= remH) {
-                res += i + 1;
-                break;
-            }
+            res += os.countElementsAtleastX({nums[i], -1});
+            os.insert({nums[i], i});
         }
 
         cout << res << "\n";

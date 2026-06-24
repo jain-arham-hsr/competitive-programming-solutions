@@ -47,42 +47,34 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
-        vector<int> a(n);
-        for (auto &x : a)
+        int n;
+        cin >> n;
+        vector<long long> p(n);
+        vector<long long> s(n);
+        for (auto &x : p)
+            cin >> x;
+        for (auto &x : s)
             cin >> x;
 
-        long long total = accumulate(a.begin(), a.end(), 0LL);
-        long long res = (h / total) * (n + k);
-        long long remH = h % total;
-        if (h % total == 0) {
-            res -= k;
-            cout << res << "\n";
+        if (p[n - 1] != s[0]) {
+            cout << "NO" << "\n";
             continue;
         }
 
-        vector<int> prefMin(n);
-        prefMin[0] = a[0];
-        for (int i = 1; i < n; i++)
-            prefMin[i] = min(prefMin[i - 1], a[i]);
+        bool ok = true;
 
-        vector<int> suffMax(n);
-        suffMax[n - 1] = a[n - 1];
-        for (int i = n - 2; i >= 0; i--)
-            suffMax[i] = max(suffMax[i + 1], a[i]);
-
-        long long sum = 0;
-        for (int i = 0; i < n; i++) {
-            sum += a[i];
-            if (sum >= remH ||
-                i < n - 1 && sum - prefMin[i] + suffMax[i + 1] >= remH) {
-                res += i + 1;
-                break;
-            }
+        for (int i = 1; i < n; i++) {
+            long long lcm = p[i] * s[i] / gcd(p[i], s[i]);
+            if (gcd(p[i - 1], lcm) != p[i])
+                ok = false;
+        }
+        for (int i = n - 2; i >= 0; i--) {
+            long long lcm = p[i] * s[i] / gcd(p[i], s[i]);
+            if (gcd(s[i + 1], lcm) != s[i])
+                ok = false;
         }
 
-        cout << res << "\n";
+        cout << (ok ? "YES" : "NO") << "\n";
     }
     return 0;
 }

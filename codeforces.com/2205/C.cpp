@@ -49,16 +49,54 @@ int main() {
     while (T--) {
         int n;
         cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
-        int maxNum = INT_MIN;
-        int minNum = INT_MAX;
+
+        vector<vector<int>> blogs;
+        blogs.reserve(n);
         for (int i = 0; i < n; i++) {
-            maxNum = max(nums[i], maxNum);
-            minNum = min(nums[i], minNum);
+            int m;
+            cin >> m;
+
+            vector<int> rawInp(m);
+
+            for (auto &x : rawInp)
+                cin >> x;
+
+            vector<int> b;
+            b.reserve(m);
+
+            vector<bool> exists(int(1e6) + 1);
+            for (int j = m - 1; j >= 0; j--) {
+                if (exists[rawInp[j]])
+                    continue;
+                b.push_back(rawInp[j]);
+                exists[rawInp[j]] = true;
+            }
+
+            blogs.push_back(b);
         }
-        cout << maxNum - minNum + 1 << "\n";
+
+        vector<bool> used(int(1e6) + 1);
+        while (blogs.size() > 0) {
+            sort(blogs.begin(), blogs.end());
+            for (auto x : blogs[0]) {
+                cout << x << " ";
+                used[x] = true;
+            }
+
+            for (int i = 1; i < blogs.size(); i++) {
+                vector<int> newB;
+                newB.reserve(blogs[i].size());
+                for (int j = 0; j < blogs[i].size(); j++) {
+                    if (used[blogs[i][j]])
+                        continue;
+                    newB.push_back(blogs[i][j]);
+                }
+                blogs[i] = newB;
+            }
+
+            blogs.assign(blogs.begin() + 1, blogs.end());
+        }
+        cout << "\n";
     }
     return 0;
 }

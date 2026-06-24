@@ -47,38 +47,39 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
-        vector<int> a(n);
-        for (auto &x : a)
+        int n;
+        cin >> n;
+        vector<int> nums(n);
+        for (auto &x : nums)
             cin >> x;
 
-        long long total = accumulate(a.begin(), a.end(), 0LL);
-        long long res = (h / total) * (n + k);
-        long long remH = h % total;
-        if (h % total == 0) {
-            res -= k;
-            cout << res << "\n";
-            continue;
+        vector<int> freq(n + 1);
+        for (int i = 0; i < n; i++) {
+            freq[nums[i]]++;
         }
 
-        vector<int> prefMin(n);
-        prefMin[0] = a[0];
-        for (int i = 1; i < n; i++)
-            prefMin[i] = min(prefMin[i - 1], a[i]);
+        int res = 0;
 
-        vector<int> suffMax(n);
-        suffMax[n - 1] = a[n - 1];
-        for (int i = n - 2; i >= 0; i--)
-            suffMax[i] = max(suffMax[i + 1], a[i]);
+        vector<vector<bool>> segExists(n + 1, vector<bool>(n + 1));
 
-        long long sum = 0;
         for (int i = 0; i < n; i++) {
-            sum += a[i];
-            if (sum >= remH ||
-                i < n - 1 && sum - prefMin[i] + suffMax[i + 1] >= remH) {
-                res += i + 1;
-                break;
+            vector<bool> exists(n + 1);
+            int maxNum = nums[i];
+            int minNum = nums[i];
+            for (int j = i; j < n; j++) {
+                if (exists[nums[j]])
+                    break;
+                exists[nums[j]] = true;
+                maxNum = max(maxNum, nums[j]);
+                minNum = min(minNum, nums[j]);
+                if (maxNum - minNum == j - i) {
+                    int l = j - i + 1;
+                    segExists[minNum][maxNum] = true;
+                    if (minNum - l >= 1 && segExists[minNum - l][maxNum - l] ||
+                        maxNum + l <= n && segExists[minNum + l][maxNum + l]) {
+                        res = max(res, j - i + 1);
+                    }
+                }
             }
         }
 

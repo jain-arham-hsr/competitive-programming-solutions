@@ -47,42 +47,44 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
-        vector<int> a(n);
-        for (auto &x : a)
+        int n, x, y;
+        cin >> n >> x >> y;
+        vector<int> nums(n);
+        for (auto &x : nums)
             cin >> x;
 
-        long long total = accumulate(a.begin(), a.end(), 0LL);
-        long long res = (h / total) * (n + k);
-        long long remH = h % total;
-        if (h % total == 0) {
-            res -= k;
-            cout << res << "\n";
-            continue;
-        }
+        vector<int> inner(nums.begin() + x, nums.begin() + y);
 
-        vector<int> prefMin(n);
-        prefMin[0] = a[0];
-        for (int i = 1; i < n; i++)
-            prefMin[i] = min(prefMin[i - 1], a[i]);
+        vector<int> outer(nums.begin(), nums.begin() + x);
 
-        vector<int> suffMax(n);
-        suffMax[n - 1] = a[n - 1];
-        for (int i = n - 2; i >= 0; i--)
-            suffMax[i] = max(suffMax[i + 1], a[i]);
+        outer.insert(outer.end(), nums.begin() + y, nums.end());
 
-        long long sum = 0;
-        for (int i = 0; i < n; i++) {
-            sum += a[i];
-            if (sum >= remH ||
-                i < n - 1 && sum - prefMin[i] + suffMax[i + 1] >= remH) {
-                res += i + 1;
-                break;
+        int minEle = inner[0];
+        int minInd = 0;
+        for (int i = 0; i < inner.size(); i++) {
+            if (inner[i] < minEle) {
+                minEle = inner[i];
+                minInd = i;
             }
         }
 
-        cout << res << "\n";
+        int b = 0;
+        for (; b < outer.size(); b++) {
+            if (outer[b] > minEle) {
+                break;
+            }
+            cout << outer[b] << " ";
+        }
+
+        for (int i = 0; i < inner.size(); i++) {
+            cout << inner[(i + minInd) % inner.size()] << " ";
+        }
+
+        for (int i = b; i < outer.size(); i++) {
+            cout << outer[i] << " ";
+        }
+
+        cout << "\n";
     }
     return 0;
 }

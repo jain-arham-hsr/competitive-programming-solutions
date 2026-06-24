@@ -54,31 +54,40 @@ int main() {
         adj[v].push_back(u);
     }
 
-    // for (auto &x : adj) {
-    //     for (auto &y : x) {
-    //         cout << y << " ";
-    //     }
-    //     cout << "\n";
-    // }
+    for (auto &x : adj)
+        sort(x.begin(), x.end());
 
     vector<int> dst(n + 1, -1);
 
     queue<int> q;
+
+    set<int> unvisited;
+    for (int i = 1; i <= n; i++) {
+        if (i != s) {
+            unvisited.insert(i);
+        }
+    }
 
     q.push(s);
     dst[s] = 0;
 
     while (q.size() > 0) {
         int curr = q.front();
-        for (int i = 1; i <= n; i++) {
-            if (find(adj[curr].begin(), adj[curr].end(), i) ==
-                    adj[curr].end() &&
-                dst[i] == -1) {
+        q.pop();
+
+        vector<int> to_erase;
+        for (int i : unvisited) {
+            auto it = lower_bound(adj[curr].begin(), adj[curr].end(), i);
+            if ((it == adj[curr].end() || *it > i)) {
                 dst[i] = dst[curr] + 1;
                 q.push(i);
+                to_erase.push_back(i);
             }
         }
-        q.pop();
+
+        for (int i : to_erase) {
+            unvisited.erase(i);
+        }
     }
 
     for (int i = 1; i <= n; i++) {

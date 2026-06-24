@@ -47,42 +47,18 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
-        vector<int> a(n);
-        for (auto &x : a)
-            cin >> x;
+        int m, n;
+        cin >> m >> n;
 
-        long long total = accumulate(a.begin(), a.end(), 0LL);
-        long long res = (h / total) * (n + k);
-        long long remH = h % total;
-        if (h % total == 0) {
-            res -= k;
-            cout << res << "\n";
-            continue;
+        int deduct = 3 * m - n;
+        int loss = deduct % 2 == 1;
+        deduct -= 3 * loss;
+        int deductPair = deduct / 2;
+        if (deductPair > m - loss) {
+            deductPair -= m - loss;
+            loss += deductPair * 2;
         }
-
-        vector<int> prefMin(n);
-        prefMin[0] = a[0];
-        for (int i = 1; i < n; i++)
-            prefMin[i] = min(prefMin[i - 1], a[i]);
-
-        vector<int> suffMax(n);
-        suffMax[n - 1] = a[n - 1];
-        for (int i = n - 2; i >= 0; i--)
-            suffMax[i] = max(suffMax[i + 1], a[i]);
-
-        long long sum = 0;
-        for (int i = 0; i < n; i++) {
-            sum += a[i];
-            if (sum >= remH ||
-                i < n - 1 && sum - prefMin[i] + suffMax[i + 1] >= remH) {
-                res += i + 1;
-                break;
-            }
-        }
-
-        cout << res << "\n";
+        cout << loss << "\n";
     }
     return 0;
 }

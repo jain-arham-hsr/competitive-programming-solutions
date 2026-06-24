@@ -44,45 +44,28 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
-        vector<int> a(n);
-        for (auto &x : a)
-            cin >> x;
+    int n;
+    cin >> n;
 
-        long long total = accumulate(a.begin(), a.end(), 0LL);
-        long long res = (h / total) * (n + k);
-        long long remH = h % total;
-        if (h % total == 0) {
-            res -= k;
-            cout << res << "\n";
-            continue;
+    vector<vector<int>> recepients(n + 1);
+
+    for (int i = 1; i <= n; i++) {
+        int k;
+        cin >> k;
+        for (int j = 0; j < k; j++) {
+            int recepient;
+            cin >> recepient;
+            recepients[recepient].push_back(i);
         }
-
-        vector<int> prefMin(n);
-        prefMin[0] = a[0];
-        for (int i = 1; i < n; i++)
-            prefMin[i] = min(prefMin[i - 1], a[i]);
-
-        vector<int> suffMax(n);
-        suffMax[n - 1] = a[n - 1];
-        for (int i = n - 2; i >= 0; i--)
-            suffMax[i] = max(suffMax[i + 1], a[i]);
-
-        long long sum = 0;
-        for (int i = 0; i < n; i++) {
-            sum += a[i];
-            if (sum >= remH ||
-                i < n - 1 && sum - prefMin[i] + suffMax[i + 1] >= remH) {
-                res += i + 1;
-                break;
-            }
-        }
-
-        cout << res << "\n";
     }
+
+    for (int i = 1; i <= n; i++) {
+        cout << recepients[i].size() << " ";
+        sort(recepients[i].begin(), recepients[i].end());
+        for (auto x : recepients[i])
+            cout << x << " ";
+        cout << "\n";
+    }
+
     return 0;
 }

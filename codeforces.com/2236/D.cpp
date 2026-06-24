@@ -47,42 +47,47 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
-        vector<int> a(n);
-        for (auto &x : a)
+        int n, k;
+        cin >> n >> k;
+        vector<int> nums(n);
+        for (auto &x : nums)
             cin >> x;
 
-        long long total = accumulate(a.begin(), a.end(), 0LL);
-        long long res = (h / total) * (n + k);
-        long long remH = h % total;
-        if (h % total == 0) {
-            res -= k;
-            cout << res << "\n";
-            continue;
+        vector<int> freq(n + 1);
+        for (int i = 0; i < n; i++) {
+            freq[nums[i]]++;
         }
 
-        vector<int> prefMin(n);
-        prefMin[0] = a[0];
-        for (int i = 1; i < n; i++)
-            prefMin[i] = min(prefMin[i - 1], a[i]);
+        bool ok = false;
+        int lastNum = -k;
 
-        vector<int> suffMax(n);
-        suffMax[n - 1] = a[n - 1];
-        for (int i = n - 2; i >= 0; i--)
-            suffMax[i] = max(suffMax[i + 1], a[i]);
+        vector<bool> hasPrior(n + 1);
+        vector<bool> isApex(n + 1);
 
-        long long sum = 0;
-        for (int i = 0; i < n; i++) {
-            sum += a[i];
-            if (sum >= remH ||
-                i < n - 1 && sum - prefMin[i] + suffMax[i + 1] >= remH) {
-                res += i + 1;
-                break;
+        for (int i = 1; i <= n; i++) {
+            if (freq[i] > 0) {
+                if (i - lastNum <= k) {
+                    hasPrior[i] = true;
+                } else {
+                    if (lastNum > 0)
+                        isApex[lastNum] = true;
+                }
+                lastNum = i;
             }
         }
 
-        cout << res << "\n";
+        isApex[lastNum] = true;
+
+        for (int i = 1; i <= n; i++) {
+            if (freq[i] > 0 && isApex[i]) {
+                if (freq[i] % 2 == 0 || hasPrior[i] == true) {
+                    ok = true;
+                    break;
+                }
+            }
+        }
+
+        cout << (ok ? "YES\n" : "NO\n");
     }
     return 0;
 }

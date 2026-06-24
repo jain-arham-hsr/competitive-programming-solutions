@@ -47,42 +47,27 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n, h, k;
-        cin >> n >> h >> k;
+        int n;
+        cin >> n;
         vector<int> a(n);
+        vector<int> b(n);
         for (auto &x : a)
             cin >> x;
-
-        long long total = accumulate(a.begin(), a.end(), 0LL);
-        long long res = (h / total) * (n + k);
-        long long remH = h % total;
-        if (h % total == 0) {
-            res -= k;
-            cout << res << "\n";
+        for (auto &x : b)
+            cin >> x;
+        if (a[n - 1] != b[n - 1]) {
+            cout << "NO\n";
             continue;
         }
-
-        vector<int> prefMin(n);
-        prefMin[0] = a[0];
-        for (int i = 1; i < n; i++)
-            prefMin[i] = min(prefMin[i - 1], a[i]);
-
-        vector<int> suffMax(n);
-        suffMax[n - 1] = a[n - 1];
-        for (int i = n - 2; i >= 0; i--)
-            suffMax[i] = max(suffMax[i + 1], a[i]);
-
-        long long sum = 0;
-        for (int i = 0; i < n; i++) {
-            sum += a[i];
-            if (sum >= remH ||
-                i < n - 1 && sum - prefMin[i] + suffMax[i + 1] >= remH) {
-                res += i + 1;
+        bool ok = true;
+        for (int i = 0; i < n - 1; i++) {
+            if ((a[i] != b[i]) && ((a[i] ^ a[i + 1]) != b[i]) &&
+                ((a[i] ^ b[i + 1]) != b[i])) {
+                ok = false;
                 break;
             }
         }
-
-        cout << res << "\n";
+        cout << (ok ? "YES\n" : "NO\n");
     }
     return 0;
 }

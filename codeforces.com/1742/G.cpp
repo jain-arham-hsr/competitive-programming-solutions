@@ -47,13 +47,33 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int a, b;
-        cin >> a >> b;
-        if (2 * b - a >= 0 && (2 * b - a) % 3 == 0 && (2 * a - b) >= 0 &&
-            (2 * a - b) % 3 == 0)
-            cout << "YES\n";
-        else
-            cout << "NO\n";
+        int n;
+        cin >> n;
+        vector<int> nums(n);
+        for (auto &x : nums)
+            cin >> x;
+        sort(nums.rbegin(), nums.rend());
+        int orSum = 0;
+        vector<int> primary;
+        primary.reserve(n);
+        vector<int> aux;
+        aux.reserve(n);
+        for (int i = 0; i < n; i++) {
+            int msb = 31;
+            for (; msb >= 0; msb--) {
+                if ((nums[i] & (1 << msb)) > 0)
+            }
+            if ((orSum | nums[i]) != orSum)
+                primary.push_back(nums[i]);
+            else
+                aux.push_back(nums[i]);
+            orSum |= nums[i];
+        }
+        for (auto &x : primary)
+            cout << x << " ";
+        for (auto &x : aux)
+            cout << x << " ";
+        cout << "\n";
     }
     return 0;
 }

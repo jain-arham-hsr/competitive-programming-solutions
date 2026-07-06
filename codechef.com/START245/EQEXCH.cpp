@@ -47,10 +47,21 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int a, b;
-        cin >> a >> b;
-        if (2 * b - a >= 0 && (2 * b - a) % 3 == 0 && (2 * a - b) >= 0 &&
-            (2 * a - b) % 3 == 0)
+        int n, k;
+        cin >> n >> k;
+        vector<int> a(n);
+        for (auto &x : a)
+            cin >> x;
+
+        int minSubtotal = 0;
+        int maxSubtotal = 0;
+        int sum = 0;
+        for (int i = 0; i < n; i++) {
+            sum += a[i];
+            minSubtotal = min(minSubtotal, sum);
+            maxSubtotal = max(maxSubtotal, sum);
+        }
+        if (abs(minSubtotal) + abs(maxSubtotal) <= k)
             cout << "YES\n";
         else
             cout << "NO\n";

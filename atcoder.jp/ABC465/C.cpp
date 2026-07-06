@@ -44,16 +44,29 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int a, b;
-        cin >> a >> b;
-        if (2 * b - a >= 0 && (2 * b - a) % 3 == 0 && (2 * a - b) >= 0 &&
-            (2 * a - b) % 3 == 0)
-            cout << "YES\n";
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+
+    deque<int> dq;
+
+    bool isRev = false;
+    for (int i = 0; i < s.size(); i++) {
+        if (!isRev)
+            dq.push_back(i + 1);
         else
-            cout << "NO\n";
+            dq.push_front(i + 1);
+        if (s[i] == 'o') {
+            isRev = !isRev;
+        }
     }
+
+    if (isRev)
+        reverse(dq.begin(), dq.end());
+
+    for (auto &x : dq)
+        cout << x << " ";
+
     return 0;
 }

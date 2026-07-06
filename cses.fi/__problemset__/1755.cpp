@@ -44,16 +44,37 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int a, b;
-        cin >> a >> b;
-        if (2 * b - a >= 0 && (2 * b - a) % 3 == 0 && (2 * a - b) >= 0 &&
-            (2 * a - b) % 3 == 0)
-            cout << "YES\n";
-        else
-            cout << "NO\n";
+    string s;
+    cin >> s;
+
+    vector<int> freq(26);
+    for (int i = 0; i < s.size(); i++) {
+        freq[s[i] - 'A']++;
     }
+
+    bool oddExists = false;
+    string mid = "";
+
+    string l = "";
+    string r = "";
+
+    for (int i = 0; i < 26; i++) {
+        if (freq[i] % 2 != 0) {
+            if (oddExists) {
+                cout << "NO SOLUTION";
+                return 0;
+            }
+            oddExists = true;
+            string temp(freq[i], 'A' + i);
+            mid = temp;
+        } else {
+            string temp(freq[i] / 2, 'A' + i);
+            l = l + temp;
+            r = temp + r;
+        }
+    }
+
+    cout << l + mid + r;
+
     return 0;
 }

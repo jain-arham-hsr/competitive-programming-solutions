@@ -47,13 +47,28 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int a, b;
-        cin >> a >> b;
-        if (2 * b - a >= 0 && (2 * b - a) % 3 == 0 && (2 * a - b) >= 0 &&
-            (2 * a - b) % 3 == 0)
-            cout << "YES\n";
-        else
-            cout << "NO\n";
+        int n, x;
+        cin >> n >> x;
+        string a(3 * n, '0');
+        for (int i = 0; i < n && x > 0; i++) {
+            a[i] = '1';
+            x--;
+        }
+        if (x == 0) {
+            cout << a << "\n";
+            continue;
+        }
+        for (int i = n - 1; i >= 0; i--) {
+            if (x > 0) {
+                a[i + n] = '1';
+                x--;
+            }
+            if (x > 0) {
+                a[i + 2 * n] = '1';
+                x--;
+            }
+        }
+        cout << a << "\n";
     }
     return 0;
 }

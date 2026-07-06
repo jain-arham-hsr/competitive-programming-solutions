@@ -47,13 +47,31 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int a, b;
-        cin >> a >> b;
-        if (2 * b - a >= 0 && (2 * b - a) % 3 == 0 && (2 * a - b) >= 0 &&
-            (2 * a - b) % 3 == 0)
-            cout << "YES\n";
-        else
-            cout << "NO\n";
+        ll x, y, k;
+        cin >> x >> y >> k;
+
+        int turnCnt = 0;
+        map<ll, int> turns;
+
+        for (ll i = y; i >= 0; i /= k) {
+            turns[i] = turnCnt++;
+            if (i == 0)
+                break;
+        }
+
+        int c = 0;
+
+        while (x != y) {
+            if (turns.count(x)) {
+                c += turns[x];
+                x = y;
+            } else {
+                x /= k;
+                c++;
+            }
+        }
+
+        cout << c << "\n";
     }
     return 0;
 }

@@ -47,13 +47,13 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int a, b;
-        cin >> a >> b;
-        if (2 * b - a >= 0 && (2 * b - a) % 3 == 0 && (2 * a - b) >= 0 &&
-            (2 * a - b) % 3 == 0)
-            cout << "YES\n";
-        else
-            cout << "NO\n";
+        int x, y;
+        cin >> x >> y;
+        long long res = 0;
+        for (; x > y; x--) {
+            res += (x + 9) / 10;
+        }
+        cout << res << "\n";
     }
     return 0;
 }

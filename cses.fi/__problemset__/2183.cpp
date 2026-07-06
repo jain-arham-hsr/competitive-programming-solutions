@@ -44,16 +44,19 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int a, b;
-        cin >> a >> b;
-        if (2 * b - a >= 0 && (2 * b - a) % 3 == 0 && (2 * a - b) >= 0 &&
-            (2 * a - b) % 3 == 0)
-            cout << "YES\n";
-        else
-            cout << "NO\n";
+    int n;
+    cin >> n;
+    vector<ll> nums(n);
+    for (auto &x : nums)
+        cin >> x;
+    sort(nums.begin(), nums.end());
+    ll maxContSum = 1;
+    for (int i = 0; i < n; i++) {
+        if (nums[i] > maxContSum) {
+            break;
+        }
+        maxContSum += nums[i];
     }
+    cout << maxContSum << "\n";
     return 0;
 }

@@ -40,20 +40,60 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
+struct DSU {
+  private:
+    vector<int> parent, rank_, size_;
+
+  public:
+    DSU(int n) : parent(n), rank_(n, 0), size_(n, 1) {
+        for (int i = 0; i < n; i++)
+            parent[i] = i;
+    }
+
+    int find(int x) { return parent[x] == x ? x : parent[x] = find(parent[x]); }
+
+    bool unite(int x, int y) {
+        x = find(x);
+        y = find(y);
+        if (x == y)
+            return false;
+        if (rank_[x] < rank_[y])
+            swap(x, y);
+        parent[y] = x;
+        size_[x] += size_[y];
+        if (rank_[x] == rank_[y])
+            rank_[x]++;
+        return true;
+    }
+
+    bool connected(int x, int y) { return find(x) == find(y); }
+    int size(int x) { return size_[find(x)]; }
+    int components(int n) {
+        int cnt = 0;
+        for (int i = 0; i < n; i++)
+            if (find(i) == i)
+                cnt++;
+        return cnt;
+    }
+};
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
+    int n, m;
+    cin >> n >> m;
+
+    DSU dsu(n + 1);
+
+    for (int i = 0; i < m; i++) {
+        string qtype;
         int a, b;
-        cin >> a >> b;
-        if (2 * b - a >= 0 && (2 * b - a) % 3 == 0 && (2 * a - b) >= 0 &&
-            (2 * a - b) % 3 == 0)
-            cout << "YES\n";
+        cin >> qtype >> a >> b;
+        if (qtype == "union")
+            dsu.unite(a, b);
         else
-            cout << "NO\n";
+            cout << (dsu.connected(a, b) ? "YES" : "NO") << "\n";
     }
     return 0;
 }

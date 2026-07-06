@@ -40,20 +40,24 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
+void move(char src, char aux, char dest, int n) {
+    if (n == 1) {
+        cout << src << " " << dest << "\n";
+        return;
+    }
+    move(src, dest, aux, n - 1);
+    cout << src << " " << dest << "\n";
+    move(aux, src, dest, n - 1);
+}
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int a, b;
-        cin >> a >> b;
-        if (2 * b - a >= 0 && (2 * b - a) % 3 == 0 && (2 * a - b) >= 0 &&
-            (2 * a - b) % 3 == 0)
-            cout << "YES\n";
-        else
-            cout << "NO\n";
-    }
+    int n;
+    cin >> n;
+    cout << ((1 << n) - 1) << "\n";
+    move('1', '2', '3', n);
+
     return 0;
 }

@@ -44,16 +44,12 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int a, b;
-        cin >> a >> b;
-        if (2 * b - a >= 0 && (2 * b - a) % 3 == 0 && (2 * a - b) >= 0 &&
-            (2 * a - b) % 3 == 0)
-            cout << "YES\n";
-        else
-            cout << "NO\n";
-    }
+    int x, y, l, r, a, b;
+    cin >> x >> y >> l >> r >> a >> b;
+
+    cout << (max(0, (min(b, l) - min(a, l))) * y +
+             max(0, (min(b, r) - max(a, l))) * x +
+             max(0, (max(b, r) - max(a, r))) * y);
+
     return 0;
 }

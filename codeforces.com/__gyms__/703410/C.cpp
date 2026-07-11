@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+template <typename A, typename B>
+ostream &operator<<(ostream &os, const pair<A, B> &p) {
+    return os << "(" << p.first << ", " << p.second << ")";
+}
+
+ostream &operator<<(ostream &os, const string &s) {
+    for (char c : s)
+        os << c;
+    return os;
+}
+
+template <typename T, typename = typename T::iterator>
+ostream &operator<<(ostream &os, const T &c) {
+    os << "{";
+    bool f = true;
+    for (auto &x : c)
+        os << (f ? f = false, "" : ", ") << x;
+    return os << "}";
+}
+
+void debug_out() { cerr << "\n"; }
+template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
+    cerr << h;
+    if constexpr (sizeof...(t))
+        cerr << ", ";
+    debug_out(forward<T>(t)...);
+}
+
+#ifdef DEBUGGER
+#define watch(...)                                                             \
+    cerr << __func__ << ":" << __LINE__ << " | " << #__VA_ARGS__ << " = ",     \
+        debug_out(__VA_ARGS__)
+#else
+#define watch(...) ((void)0)
+#endif
+
+// ==================================================================== //
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    int T;
+    cin >> T;
+    while (T--) {
+        int h, n;
+        cin >> h >> n;
+
+        vector<ll> a(n);
+        for (auto &x : a)
+            cin >> x;
+        vector<ll> c(n);
+        for (auto &x : c)
+            cin >> x;
+
+        ll l = 0, r = 1e12 + 1;
+        while (l < r - 1) {
+            ll mid = l + (r - l) / 2;
+            ll damage = 0;
+            for (int i = 0; i < n; i++) {
+                damage += ((mid + c[i] - 1) / c[i]) * a[i];
+                if (damage >= h)
+                    break;
+            }
+            if (damage >= h)
+                r = mid;
+            else
+                l = mid;
+        }
+
+        cout << r << "\n";
+    }
+    return 0;
+}

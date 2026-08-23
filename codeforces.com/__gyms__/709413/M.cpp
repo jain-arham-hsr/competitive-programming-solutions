@@ -1,0 +1,105 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+template <typename A, typename B>
+ostream &operator<<(ostream &os, const pair<A, B> &p) {
+    return os << "(" << p.first << ", " << p.second << ")";
+}
+
+ostream &operator<<(ostream &os, const string &s) {
+    for (char c : s)
+        os << c;
+    return os;
+}
+
+template <typename T, typename = typename T::iterator>
+ostream &operator<<(ostream &os, const T &c) {
+    os << "{";
+    bool f = true;
+    for (auto &x : c)
+        os << (f ? f = false, "" : ", ") << x;
+    return os << "}";
+}
+
+void debug_out() { cerr << "\n"; }
+template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
+    cerr << h;
+    if constexpr (sizeof...(t))
+        cerr << ", ";
+    debug_out(forward<T>(t)...);
+}
+
+#ifdef DEBUGGER
+#define watch(...)                                                             \
+    cerr << __func__ << ":" << __LINE__ << " | " << #__VA_ARGS__ << " = ",     \
+        debug_out(__VA_ARGS__)
+#else
+#define watch(...) ((void)0)
+#endif
+
+// ==================================================================== //
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    int T;
+    cin >> T;
+    while (T--) {
+        int n;
+        cin >> n;
+        vector<int> nums(n);
+        for (auto &x : nums)
+            cin >> x;
+
+        int minInd = -1;
+        for (int i = 1; i < n; i++) {
+            if (nums[i] < nums[i - 1])
+                minInd = i;
+        }
+
+        ll sumMid = nums[minInd] + nums[minInd - 1] + nums[minInd + 1];
+        ll sum = 0;
+        long double maxAvg = sumMid * 1.0L / 3;
+        ll leftMax = 0;
+        ll rightMax = 0;
+        int p = 0;
+        for (int i = 0; i < n; i++) {
+            ll sumLeft = 0;
+            ll sumRight = 0;
+            if (minInd + 2 + i < n)
+                sumRight = nums[minInd + 2 + i];
+            if (minInd - 2 - i >= 0)
+                sumLeft = nums[minInd - 2 - i];
+            if (sumLeft == 0 && sumRight == 0) {
+                p = i;
+                break;
+            }
+            leftMax += sumLeft;
+            rightMax += sumRight;
+            watch(i, (sumMid + leftMax), (sumMid + rightMax));
+            if (minInd - 2 - i >= 0) {
+                maxAvg = max(maxAvg, (sumMid + leftMax) * 1.0L / (i + 4));
+            }
+            if (minInd + 2 + i < n) {
+                maxAvg = max(maxAvg, (sumMid + rightMax) * 1.0L / (i + 4));
+            }
+        }
+        watch(leftMax, rightMax);
+        for (int i = 0; minInd + 2 + i < n; i++) {
+            leftMax += nums[minInd + 2 + i];
+            watch(leftMax);
+            watch(p + i + 4);
+            maxAvg = max(maxAvg, (sumMid + leftMax) * 1.0L / (minInd + i + 3));
+        }
+        for (int i = 0; minInd - 2 - i >= 0; i++) {
+            rightMax += nums[minInd - 2 - i];
+            maxAvg =
+                max(maxAvg, (sumMid + rightMax) * 1.0L / (n - minInd + i + 2));
+        }
+
+        cout << setprecision(20) << fixed << maxAvg << "\n";
+    }
+    return 0;
+}

@@ -49,11 +49,47 @@ int main() {
     while (T--) {
         int n;
         cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
+        vector<int> a(n);
+        for (auto &x : a)
             cin >> x;
+        string s;
+        cin >> s;
 
-        sort(nums.begin(), nums.end());
+        int zeroCnt = 0;
+        int oneCnt = 0;
+        ll inv = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (a[i] == 1)
+                oneCnt++;
+            else {
+                zeroCnt++;
+                inv += oneCnt;
+            }
+        }
+
+        cout << inv << " ";
+
+        int l = -1;
+        int r = n;
+
+        while (l + 1 < n && a[l + 1] == 0)
+            l++;
+        while (r - 1 >= 0 && a[r - 1] == 1)
+            r--;
+
+        for (int i = 0; i < n; i++) {
+            if (s[i] == '0') {
+                l++;
+                inv -= oneCnt - n + min(n - 1, r);
+            } else {
+                r--;
+                inv -= zeroCnt - max(0, l);
+            }
+            watch(l, r);
+            cout << max(0LL, inv) << " ";
+        }
+        cout << "\n";
     }
     return 0;
 }

@@ -47,13 +47,16 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
+        ll x, m;
+        cin >> x >> m;
 
-        sort(nums.begin(), nums.end());
+        int res = 0;
+        for (int y = 1; y <= min(2 * x, m); y++) {
+            if (x != y && (x % (x ^ y) == 0 || y % (x ^ y) == 0))
+                res++;
+        }
+
+        cout << res << "\n";
     }
     return 0;
 }

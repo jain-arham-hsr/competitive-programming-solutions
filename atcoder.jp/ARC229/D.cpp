@@ -47,13 +47,15 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
+        int k;
+        cin >> k;
+        vector<int> a(k + 1);
+        for (auto &x : a)
             cin >> x;
-
-        sort(nums.begin(), nums.end());
+        if (k > 1)
+            cout << "Alice\n";
+        else
+            cout << "Bob\n";
     }
     return 0;
 }

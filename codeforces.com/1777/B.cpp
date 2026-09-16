@@ -40,6 +40,46 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
+struct Comb {
+    long long MOD;
+    vector<long long> fact, inv_fact;
+
+    Comb(int maxn, long long mod) : MOD(mod), fact(maxn), inv_fact(maxn) {
+        fact[0] = 1;
+        for (int i = 1; i < maxn; i++)
+            fact[i] = fact[i - 1] * i % MOD;
+        inv_fact[maxn - 1] = power(fact[maxn - 1], MOD - 2);
+        for (int i = maxn - 2; i >= 0; i--)
+            inv_fact[i] = inv_fact[i + 1] * (i + 1) % MOD;
+    }
+
+    long long nPr(int n, int r) {
+        if (r < 0 || r > n)
+            return 0;
+        return fact[n] * inv_fact[n - r] % MOD;
+    }
+
+    long long nCr(int n, int r) {
+        if (r < 0 || r > n)
+            return 0;
+        return fact[n] * inv_fact[r] % MOD * inv_fact[n - r] % MOD;
+    }
+
+  private:
+    long long power(long long base, long long exp) {
+        long long res = 1;
+        base %= MOD;
+        for (; exp > 0; exp >>= 1) {
+            if (exp & 1)
+                res = res * base % MOD;
+            base = base * base % MOD;
+        }
+        return res;
+    }
+};
+
+ll MOD = 1e9 + 7;
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
@@ -47,13 +87,15 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
+        ll n;
         cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
 
-        sort(nums.begin(), nums.end());
+        Comb comb(n + 1, MOD);
+
+        cout << ((((n % MOD) * ((n - 1) % MOD)) % MOD) *
+                 (comb.nPr(n, n) % MOD)) %
+                    MOD
+             << "\n";
     }
     return 0;
 }

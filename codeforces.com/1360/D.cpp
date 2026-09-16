@@ -40,6 +40,8 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
+vector<long long> trialDivision(long long n) {}
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
@@ -47,13 +49,20 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
+        int n, k;
+        cin >> n >> k;
 
-        sort(nums.begin(), nums.end());
+        vector<int> factors;
+        for (long long i = 1; i * i <= n; i++)
+            if (n % i == 0) {
+                factors.push_back(i);
+                factors.push_back(n / i);
+            }
+
+        sort(factors.begin(), factors.end());
+
+        cout << n / (*(upper_bound(factors.begin(), factors.end(), k) - 1))
+             << "\n";
     }
     return 0;
 }

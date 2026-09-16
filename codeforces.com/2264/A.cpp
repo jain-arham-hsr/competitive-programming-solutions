@@ -49,11 +49,35 @@ int main() {
     while (T--) {
         int n;
         cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
+
+        vector<int> p(n);
+        for (auto &x : p)
             cin >> x;
 
-        sort(nums.begin(), nums.end());
+        stack<int> unmatch;
+
+        for (int i = 0; i < n; i++) {
+            if (p[i] != i + 1)
+                unmatch.push(p[i]);
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (p[i] != i + 1) {
+                p[i] = unmatch.top();
+                unmatch.pop();
+            }
+        }
+
+        bool ok = true;
+
+        for (int i = 0; i < n; i++) {
+            if (p[i] != i + 1) {
+                ok = false;
+                break;
+            }
+        }
+
+        cout << (ok ? "YES\n" : "NO\n");
     }
     return 0;
 }

@@ -49,11 +49,7 @@ int main() {
     while (T--) {
         int n;
         cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
-
-        sort(nums.begin(), nums.end());
+        cout << ((n % 2) * 20 + (n / 2) * 30) << "\n";
     }
     return 0;
 }

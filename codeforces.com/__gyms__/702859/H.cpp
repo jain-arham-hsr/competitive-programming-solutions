@@ -47,13 +47,16 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
-
-        sort(nums.begin(), nums.end());
+        int x, y;
+        cin >> x >> y;
+        cout << 2 * (x - y) << "\n";
+        for (int i = y; i < x; i++) {
+            cout << i << " ";
+        }
+        for (int i = x; i > y; i--) {
+            cout << i << " ";
+        }
+        cout << "\n";
     }
     return 0;
 }

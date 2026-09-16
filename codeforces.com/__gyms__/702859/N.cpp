@@ -47,13 +47,28 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
+        ll b, c, d;
+        cin >> b >> c >> d;
 
-        sort(nums.begin(), nums.end());
+        bool valid = true;
+        ll a = 0;
+        for (int i = 0; i < 64; i++) {
+            bool bSet = ((1LL << i) & b) > 0;
+            bool cSet = ((1LL << i) & c) > 0;
+            bool dSet = ((1LL << i) & d) > 0;
+            if (!bSet && cSet && dSet || bSet && !cSet && !dSet) {
+                valid = false;
+                break;
+            }
+            if (!bSet && !cSet && dSet || bSet && cSet && !dSet) {
+                a += (1LL << i);
+                watch(i, a);
+            }
+        }
+        if (valid)
+            cout << a << "\n";
+        else
+            cout << -1 << "\n";
     }
     return 0;
 }

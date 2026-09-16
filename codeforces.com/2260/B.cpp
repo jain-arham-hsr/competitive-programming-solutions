@@ -39,7 +39,6 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 #endif
 
 // ==================================================================== //
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
@@ -47,13 +46,24 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
+        ll x, y, k;
+        cin >> x >> y >> k;
 
-        sort(nums.begin(), nums.end());
+        ll res = 0;
+
+        if (y <= x) {
+            cout << res << "\n";
+            continue;
+        }
+
+        ll i = 0;
+        for (; (2 * (x + i) <= y + i) && (i < k); i++) {
+            res += (y + i) % (x + i);
+        }
+
+        res += ((y + i) % (x + i)) * max(0LL, k - i);
+
+        cout << res << "\n";
     }
     return 0;
 }

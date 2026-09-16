@@ -47,13 +47,46 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
+        int n, m;
+        cin >> n >> m;
+        vector<string> grid(n);
+        for (auto &x : grid)
             cin >> x;
-
-        sort(nums.begin(), nums.end());
+        bool valid = true;
+        for (int i = 0; i < n; i++) {
+            bool nextWhite = true;
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == 'U') {
+                    grid[i][j] = nextWhite ? 'W' : 'B';
+                    grid[i + 1][j] = nextWhite ? 'B' : 'W';
+                    nextWhite = !nextWhite;
+                }
+            }
+            if (!nextWhite) {
+                valid = false;
+                break;
+            }
+        }
+        for (int j = 0; j < m; j++) {
+            bool nextWhite = true;
+            for (int i = 0; i < n; i++) {
+                if (grid[i][j] == 'L') {
+                    grid[i][j] = nextWhite ? 'W' : 'B';
+                    grid[i][j + 1] = nextWhite ? 'B' : 'W';
+                    nextWhite = !nextWhite;
+                }
+            }
+            if (!nextWhite) {
+                valid = false;
+                break;
+            }
+        }
+        if (valid) {
+            for (auto &x : grid)
+                cout << x << "\n";
+        } else {
+            cout << "-1\n";
+        }
     }
     return 0;
 }

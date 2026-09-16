@@ -49,11 +49,22 @@ int main() {
     while (T--) {
         int n;
         cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
-
-        sort(nums.begin(), nums.end());
+        if (n < 3) {
+            cout << -1 << "\n";
+            continue;
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == 0 || j == n - 1)
+                    cout << 1 << " ";
+                else if (i == 1 && (j == n - 2 || j == n - 3))
+                    cout << 1 << " ";
+                else
+                    cout << 0 << " ";
+            }
+            cout << "\n";
+        }
+        cout << "\n";
     }
     return 0;
 }

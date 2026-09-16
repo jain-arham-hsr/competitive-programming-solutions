@@ -44,16 +44,31 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
+    int n, m;
+    cin >> n >> m;
+
+    vector<int> t(n);
+    for (auto &x : t)
+        cin >> x;
+
+    vector<vector<int>> d;
+    for (int i = 0; i < m; i++) {
+        vector<int> di(n);
+        for (auto &x : di)
+            cin >> x;
+        d.push_back(di);
+    }
+
+    watch(d);
+
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
-
-        sort(nums.begin(), nums.end());
+        ll x, i, j;
+        cin >> x >> i >> j;
+        i--;
+        j--;
+        cout << (t[j] * ((x + d[i][j] + t[j] - 1) / t[j])) - x << "\n";
     }
     return 0;
 }

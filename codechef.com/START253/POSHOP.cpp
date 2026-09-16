@@ -53,7 +53,18 @@ int main() {
         for (auto &x : nums)
             cin >> x;
 
-        sort(nums.begin(), nums.end());
+        int maxSpend = 0;
+
+        for (int i = 0; i < n; i++) {
+            maxSpend = max(maxSpend, nums[i]);
+            for (int j = i + 1; j < n; j++) {
+                if (nums[i] > nums[j])
+                    continue;
+                maxSpend = max(maxSpend, nums[i] + nums[j]);
+            }
+        }
+
+        cout << maxSpend << "\n";
     }
     return 0;
 }

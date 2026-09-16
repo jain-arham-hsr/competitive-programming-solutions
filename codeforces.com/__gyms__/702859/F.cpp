@@ -47,13 +47,25 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
+        string a, b;
+        cin >> a >> b;
+        if (a.size() < b.size())
+            swap(a, b);
+        string pad(a.size() - b.size(), '0');
+        b = pad + b;
+        int n = a.size();
 
-        sort(nums.begin(), nums.end());
+        ll res = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (a[i] != b[i]) {
+                res += abs(a[i] - b[i]);
+                res += 9 * (n - i - 1);
+                break;
+            }
+        }
+
+        cout << res << "\n";
     }
     return 0;
 }

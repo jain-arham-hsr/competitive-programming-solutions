@@ -47,13 +47,32 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
+        string s;
+        cin >> s;
 
-        sort(nums.begin(), nums.end());
+        int n = s.size();
+        int total = 0;
+        bool valid = true;
+        for (int i = 0; i < n; i++) {
+            if (s[i] == '\\') {
+                if (i == n - 1) {
+                    valid = false;
+                    break;
+                }
+                if (s[i + 1] == '\\') {
+                    total++;
+                    i++;
+                } else {
+                    break;
+                }
+            } else {
+                total++;
+            }
+        }
+        if (!valid)
+            cout << "INVALID\n";
+        else
+            cout << total << "\n";
     }
     return 0;
 }

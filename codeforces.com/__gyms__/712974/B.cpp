@@ -47,13 +47,19 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
-
-        sort(nums.begin(), nums.end());
+        ll n, k, m;
+        cin >> n >> k >> m;
+        ll minSeg1 = n - k + 1;
+        if (k == 0)
+            minSeg1--;
+        ll minSeg2 = 1;
+        ll res = 0;
+        if (minSeg1 != 1) {
+            res -= (m - n);
+            res += m - minSeg1;
+        }
+        res += m - minSeg2;
+        cout << res << "\n";
     }
     return 0;
 }

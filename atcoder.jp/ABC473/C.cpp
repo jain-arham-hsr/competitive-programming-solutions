@@ -44,16 +44,21 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
+    int n, k;
+    cin >> n >> k;
 
-        sort(nums.begin(), nums.end());
+    int maxFreq = 0;
+
+    vector<int> freq(k + 1);
+    for (int i = 0; i < n; i++) {
+        int num;
+        cin >> num;
+        freq[num]++;
+        maxFreq = max(freq[num], maxFreq);
     }
+
+    cout << count(freq.begin() + 1, freq.end(), maxFreq) +
+                count(freq.begin() + 1, freq.end(), maxFreq - 1);
+
     return 0;
 }

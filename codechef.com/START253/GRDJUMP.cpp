@@ -47,13 +47,19 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
+        ll a, b, p, q, r;
+        cin >> a >> b >> p >> q >> r;
+        ll m = min(a, b);
+        ll cost = LLONG_MAX;
+        for (ll k : {0LL, 1LL, m - 1, m}) {
+            if (k < 0 || k > m)
+                continue;
+            ll c = k * r + ((a - k + 1) / 2) * p + ((b - k + 1) / 2) * q;
+            cost = min(cost, c);
+        }
+        watch(cost);
 
-        sort(nums.begin(), nums.end());
+        cout << cost << "\n";
     }
     return 0;
 }

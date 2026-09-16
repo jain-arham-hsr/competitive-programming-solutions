@@ -47,13 +47,26 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
+        int n, k;
+        cin >> n >> k;
+        string s;
+        cin >> s;
 
-        sort(nums.begin(), nums.end());
+        int res = 0;
+        int hasZero = false;
+
+        for (int i = 0; i < n; i++) {
+            if (s[i] == '0')
+                hasZero = true;
+            if ((i + 1) % k == 0) {
+                if (!hasZero)
+                    res++;
+                hasZero = false;
+            }
+            watch(res);
+        }
+
+        cout << res << "\n";
     }
     return 0;
 }

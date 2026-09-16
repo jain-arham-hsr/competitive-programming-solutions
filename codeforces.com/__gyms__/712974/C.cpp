@@ -49,11 +49,44 @@ int main() {
     while (T--) {
         int n;
         cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
-
-        sort(nums.begin(), nums.end());
+        int bobNeg = 0, alice = 0, bobPos = 0;
+        for (int i = 0; i < n; i++) {
+            int num;
+            cin >> num;
+            if (num <= -10) {
+                bobNeg++;
+            } else if (num < 10) {
+                alice++;
+            } else {
+                bobPos++;
+            }
+        }
+        watch(bobNeg, alice, bobPos);
+        if (alice < bobPos || alice == 0) {
+            cout << "Bob" << "\n";
+            continue;
+        } else if (bobPos != 0) {
+            alice = alice - bobPos + 1;
+            if (bobNeg == 0) {
+                cout << "Alice" << "\n";
+                continue;
+            }
+            if (abs(bobNeg - alice) % 2 != 0) {
+                cout << "Bob" << "\n";
+            } else {
+                cout << "Alice" << "\n";
+            }
+        } else {
+            if (bobNeg == 0) {
+                cout << "Alice" << "\n";
+                continue;
+            }
+            if (abs(bobNeg - alice) % 2 != 0) {
+                cout << "Alice" << "\n";
+            } else {
+                cout << "Bob" << "\n";
+            }
+        }
     }
     return 0;
 }

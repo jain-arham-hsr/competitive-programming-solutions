@@ -47,13 +47,21 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
+        int x, y;
+        cin >> x >> y;
 
-        sort(nums.begin(), nums.end());
+        int maxVal = x + y;
+
+        int finalX = 0;
+
+        for (int i = 30; i >= 0; i--) {
+            int isSet = (maxVal & (1 << i)) > 0;
+            if (isSet && (finalX + (1 << i) <= x)) {
+                finalX += (1 << i);
+            }
+        }
+
+        cout << maxVal << " " << (x - finalX) << "\n";
     }
     return 0;
 }

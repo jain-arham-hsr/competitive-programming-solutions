@@ -49,11 +49,36 @@ int main() {
     while (T--) {
         int n;
         cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
 
-        sort(nums.begin(), nums.end());
+        string t, b;
+        cin >> t >> b;
+
+        string resStr(n + 1, '0');
+
+        resStr[0] = t[0];
+        resStr[n] = b[n - 1];
+
+        int ways = 1;
+        bool topRow = true;
+
+        for (int i = 1; i < n; i++) {
+            if (topRow) {
+                if (t[i] < b[i - 1]) {
+                    resStr[i] = t[i];
+                    ways = 1;
+                } else if (b[i - 1] < t[i]) {
+                    resStr[i] = b[i - 1];
+                    topRow = false;
+                } else {
+                    resStr[i] = t[i];
+                    ways++;
+                }
+            } else {
+                resStr[i] = b[i - 1];
+            }
+        }
+
+        cout << resStr << "\n" << ways << "\n";
     }
     return 0;
 }

@@ -52,8 +52,7 @@ int main() {
         vector<int> nums(n);
         for (auto &x : nums)
             cin >> x;
-
-        sort(nums.begin(), nums.end());
+        cout << gcd(nums[0], nums[n - 1]) << "\n";
     }
     return 0;
 }

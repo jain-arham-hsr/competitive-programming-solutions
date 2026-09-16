@@ -40,20 +40,30 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
+int MOD = 1e9 + 7;
+
+long long power(long long base, long long exp, long long mod) {
+    long long result = 1;
+    base %= mod;
+    while (exp > 0) {
+        if (exp & 1)
+            result = result * base % mod;
+        base = base * base % mod;
+        exp >>= 1;
+    }
+    return result;
+}
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
+    int n;
+    cin >> n;
 
-        sort(nums.begin(), nums.end());
-    }
+    ll nonRootCnt = (1LL << n) - 2;
+
+    cout << ((6 * power(4, nonRootCnt, MOD)) % MOD);
+
     return 0;
 }

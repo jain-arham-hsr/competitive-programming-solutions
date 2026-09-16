@@ -44,16 +44,29 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
+    int n;
+    cin >> n;
 
-        sort(nums.begin(), nums.end());
+    vector<ll> a(n + 1);
+    for (auto &x : a)
+        cin >> x;
+
+    vector<ll> b(n + 1);
+    for (auto &x : b)
+        cin >> x;
+
+    ll res = 0;
+    for (int i = n; i > 0; i--) {
+        if (b[i] <= a[i])
+            continue;
+        int req = (b[i] - a[i] + 1) / 2;
+        b[i - 1] += req;
+        res += req;
     }
+    if (a[0] < b[0])
+        cout << -1;
+    else
+        cout << res;
+
     return 0;
 }

@@ -44,16 +44,21 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
-
-        sort(nums.begin(), nums.end());
+    int n;
+    cin >> n;
+    vector<int> freq(101);
+    for (int i = 0; i < n; i++) {
+        int num;
+        cin >> num;
+        freq[num]++;
     }
+
+    int res = 0;
+    for (int i = 0; i < 101; i++) {
+        res += i * (freq[i] % 2);
+    }
+
+    cout << res << "\n";
+
     return 0;
 }

@@ -47,13 +47,28 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
+        ll n, m;
+        cin >> n >> m;
+
+        vector<int> a(n);
+        for (auto &x : a)
             cin >> x;
 
-        sort(nums.begin(), nums.end());
+        priority_queue<int> max_heap(a.begin(), a.begin() + m - 1);
+
+        ll deduct = accumulate(a.begin(), a.begin() + m - 1, 0LL);
+        ll maxScore = m * a[m - 1] - deduct;
+
+        for (int i = m; i < n; i++) {
+            deduct += a[i - 1];
+            max_heap.push(a[i - 1]);
+            deduct -= max_heap.top();
+            max_heap.pop();
+            ll currScore = m * a[i] - deduct;
+            maxScore = max(maxScore, currScore);
+        }
+
+        cout << maxScore << "\n";
     }
     return 0;
 }

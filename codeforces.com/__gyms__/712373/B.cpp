@@ -44,16 +44,15 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
+    int n;
+    cin >> n;
 
-        sort(nums.begin(), nums.end());
+    long double ans = 0;
+    for (int i = 1; i <= n; i++) {
+        ans += 1.0L / i;
     }
+
+    cout << fixed << setprecision(12) << ans;
+
     return 0;
 }

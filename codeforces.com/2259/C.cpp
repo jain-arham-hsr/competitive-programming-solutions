@@ -49,11 +49,37 @@ int main() {
     while (T--) {
         int n;
         cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
+        vector<int> a(n);
+        for (auto &x : a)
             cin >> x;
 
-        sort(nums.begin(), nums.end());
+        bool oneExists = false;
+        for (int i = 0; i < n; i++) {
+            if (a[i] == 1)
+                oneExists = true;
+            else if (a[i] == -1) {
+                if (!oneExists)
+                    a[i] = 1;
+                break;
+            }
+        }
+        oneExists = false;
+        for (int i = n - 1; i >= 0; i--) {
+            if (a[i] == 1)
+                oneExists = true;
+            else if (a[i] == -1) {
+                if (!oneExists)
+                    a[i] = 1;
+                break;
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            if (a[i] == -1)
+                a[i] = 0;
+        }
+        for (auto &x : a)
+            cout << x << " ";
+        cout << "\n";
     }
     return 0;
 }

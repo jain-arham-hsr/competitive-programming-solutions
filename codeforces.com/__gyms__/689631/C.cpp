@@ -49,11 +49,44 @@ int main() {
     while (T--) {
         int n;
         cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
+
+        vector<pair<int, int>> nums(n);
+        for (int i = 0; i < n; i++) {
+            cin >> nums[i].first;
+            nums[i].second = i + 1;
+        }
 
         sort(nums.begin(), nums.end());
+
+        vector<pair<int, int>> res;
+        res.reserve(30 * n);
+
+        int target = nums[0].first;
+        int targetInd = nums[0].second;
+        bool valid = true;
+        for (int i = 0; i < n; i++) {
+            if (nums[i].first > target && target == 1) {
+                valid = false;
+                break;
+            }
+            while (nums[i].first > target) {
+                nums[i].first = (nums[i].first + target - 1) / target;
+                res.push_back({nums[i].second, targetInd});
+            }
+            if (nums[i].first < target) {
+                target = nums[i].first;
+                targetInd = nums[i].second;
+                i = -1;
+            }
+        }
+
+        if (!valid)
+            cout << "-1\n";
+        else {
+            cout << res.size() << "\n";
+            for (auto &x : res)
+                cout << x.first << " " << x.second << "\n";
+        }
     }
     return 0;
 }

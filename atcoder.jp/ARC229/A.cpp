@@ -44,16 +44,43 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
+    int x;
+    cin >> x;
 
-        sort(nums.begin(), nums.end());
+    string s(99, 'A');
+
+    for (int i = 0; i < 99; i++) {
+        if (i % 2 == 1)
+            s[i] = 'R';
     }
+
+    int cCnt = 0;
+    int rem = x;
+    for (int i = 98; i > 0; i -= 2) {
+        int aCnt = i / 2;
+        if (aCnt <= rem) {
+            s[i] = 'C';
+            rem -= aCnt;
+            if (rem == 0)
+                break;
+            else {
+                cCnt++;
+                rem += cCnt;
+            }
+        }
+    }
+
+    cout << s << "\n";
+
+    int res = 0;
+    int aCnt = 0;
+    for (int i = 0; i < 99; i++) {
+        if (s[i] == 'A')
+            aCnt++;
+        else if (s[i] == 'C')
+            res += aCnt;
+    }
+    watch(res);
+
     return 0;
 }

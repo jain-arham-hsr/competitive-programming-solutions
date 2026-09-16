@@ -49,11 +49,34 @@ int main() {
     while (T--) {
         int n;
         cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
+        set<int> univ;
+        vector<set<int>> sets;
+        for (int i = 0; i < n; i++) {
+            int k;
+            cin >> k;
+            set<int> si;
+            for (int j = 0; j < k; j++) {
+                int num;
+                cin >> num;
+                univ.insert(num);
+                si.insert(num);
+            }
+            sets.push_back(si);
+        }
 
-        sort(nums.begin(), nums.end());
+        int res = 0;
+
+        for (auto num : univ) {
+            set<int> curr;
+            for (int i = 0; i < n; i++) {
+                if (!sets[i].contains(num)) {
+                    curr.insert(sets[i].begin(), sets[i].end());
+                }
+            }
+            res = max(res, int(curr.size()));
+        }
+
+        cout << res << "\n";
     }
     return 0;
 }

@@ -47,13 +47,21 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
+        ll n;
         cin >> n;
-        vector<int> nums(n);
+        vector<ll> nums(n);
         for (auto &x : nums)
             cin >> x;
 
-        sort(nums.begin(), nums.end());
+        ll total = accumulate(nums.begin(), nums.end(), 0);
+        bool valid = false;
+        for (int i = 0; i < n; i++) {
+            if ((total - nums[i]) * 1.0L / (n - 1) == nums[i]) {
+                valid = true;
+                break;
+            }
+        }
+        cout << (valid ? "YES" : "NO") << "\n";
     }
     return 0;
 }

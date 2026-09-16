@@ -49,11 +49,21 @@ int main() {
     while (T--) {
         int n;
         cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
+        vector<int> a(n);
+        for (auto &x : a)
             cin >> x;
 
-        sort(nums.begin(), nums.end());
+        int zeroCount = count(a.begin(), a.end(), 0);
+        int midZeroCount = zeroCount - (a[0] == 0) - (a[n - 1] == 0);
+
+        if (a[0] == 0 && a[n - 1] == 0)
+            cout << 0 << "\n";
+        else if ((a[0] == 0 || a[n - 1] == 0) && midZeroCount >= 1)
+            cout << 1 << "\n";
+        else if (midZeroCount >= 2)
+            cout << 2 << "\n";
+        else
+            cout << -1 << "\n";
     }
     return 0;
 }

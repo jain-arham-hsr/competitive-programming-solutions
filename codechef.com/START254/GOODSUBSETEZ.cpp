@@ -49,11 +49,26 @@ int main() {
     while (T--) {
         int n;
         cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
+        vector<int> s(n);
+        for (auto &x : s)
             cin >> x;
 
-        sort(nums.begin(), nums.end());
+        vector<int> freq(32);
+        for (int i = 0; i < n; i++) {
+            for (int j = 31; j >= 0; j--) {
+                if ((s[i] & (1 << j)) > 0) {
+                    freq[j]++;
+                    break;
+                }
+            }
+        }
+
+        int maxFreq = 1;
+        for (int i = 0; i < 32; i++) {
+            maxFreq = max(freq[i], maxFreq);
+        }
+
+        cout << maxFreq << "\n";
     }
     return 0;
 }

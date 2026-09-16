@@ -52,8 +52,17 @@ int main() {
         vector<int> nums(n);
         for (auto &x : nums)
             cin >> x;
-
-        sort(nums.begin(), nums.end());
+        int clsA = 0, clsB = 0, clsC = 0;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] % 2 == 1) {
+                clsA++;
+            } else if (nums[i] % 4 == 0) {
+                clsB++;
+            } else {
+                clsC++;
+            }
+        }
+        cout << max(clsA, max(clsB, clsC)) << "\n";
     }
     return 0;
 }

@@ -1,54 +1,81 @@
 #include <bits/stdc++.h>
 using namespace std;
+typedef long long ll;
+
+template <typename A, typename B>
+ostream &operator<<(ostream &os, const pair<A, B> &p) {
+    return os << "(" << p.first << ", " << p.second << ")";
+}
+
+ostream &operator<<(ostream &os, const string &s) {
+    for (char c : s)
+        os << c;
+    return os;
+}
+
+template <typename T, typename = typename T::iterator>
+ostream &operator<<(ostream &os, const T &c) {
+    os << "{";
+    bool f = true;
+    for (auto &x : c)
+        os << (f ? f = false, "" : ", ") << x;
+    return os << "}";
+}
+
+void debug_out() { cerr << "\n"; }
+template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
+    cerr << h;
+    if constexpr (sizeof...(t))
+        cerr << ", ";
+    debug_out(forward<T>(t)...);
+}
+
+#ifdef DEBUGGER
+#define watch(...)                                                             \
+    cerr << __func__ << ":" << __LINE__ << " | " << #__VA_ARGS__ << " = ",     \
+        debug_out(__VA_ARGS__)
+#else
+#define watch(...) ((void)0)
+#endif
+
+// ==================================================================== //
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int n, x, y;
-    vector<int> kids(n);
-
+    ll n, x, y;
     cin >> n >> x >> y;
-    for (auto &x : kids)
-        cin >> x;
 
-    int diff = y - x;
+    vector<int> a(n);
+    for (auto &p : a)
+        cin >> p;
 
-    int minCandies = INT_MAX;
-    int maxCandies = INT_MIN;
+    int minCandies = a[0];
     for (int i = 0; i < n; i++) {
-        minCandies = min(minCandies, kids[i]);
-        maxCandies = max(maxCandies, kids[i]);
+        minCandies = min(minCandies, a[i]);
     }
 
-    long long totalLargeCandies = 0;
-    int maxLargeCandies = minCandies;
+    ll wt = minCandies * y;
+    ll res = 0;
 
-    if (maxLargeCandies *)
+    bool valid = true;
 
-        while (maxLargeCandies * diff + minCandies * x > maxCandies * x) {
-            maxLargeCandies--;
+    for (int i = 0; i < n; i++) {
+        ll currWt = (a[i] - minCandies) * x + minCandies * y;
+        if ((currWt - wt) % (y - x) == 0 &&
+            (currWt - wt) / (y - x) <= minCandies) {
+            res += minCandies - ((currWt - wt) / (y - x));
+        } else {
+            valid = false;
+            break;
         }
+    }
 
-    if (maxLargeCandies == 0) {
-        cout << 0;
-        return 0;
-    } else if (maxLargeCandies < 0) {
+    if (valid) {
+        cout << res;
+    } else {
         cout << -1;
-        return 0;
-    }
-
-    for (int i = 0; i < n; i++) {
-        if ((kids[i] - maxLargeCandies) % diff != 0) {
-            cout << -1;
-            return 0;
-        }
-        int numOfReplacements = (kids[i] - minCandies) / diff;
-        if (numOfReplacements < kids[i]) {
-            cout << -1;
-            return 0;
-        }
-        totalLargeCandies -= numOfReplacements;
     }
 
     return 0;

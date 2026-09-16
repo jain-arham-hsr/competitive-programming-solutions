@@ -47,13 +47,18 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
+        int n, k;
+        cin >> n >> k;
+        vector<int> a(n);
+        for (auto &x : a)
             cin >> x;
-
-        sort(nums.begin(), nums.end());
+        int currSum = accumulate(a.begin(), a.begin() + n - k, 0);
+        int maxSum = currSum;
+        for (int i = n - k; i < n; i++) {
+            currSum = currSum + a[i] - a[i - n + k];
+            maxSum = max(currSum, maxSum);
+        }
+        cout << maxSum << "\n";
     }
     return 0;
 }

@@ -44,16 +44,24 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
+    vector<int> nDigTwoPowers = {8,         64,        512,     8192,
+                                 65536,     524288,    8388608, 67108864,
+                                 536870912, 1073741824};
+    vector<int> nDigThreePowers = {9,         81,        729,     6561,
+                                   59049,     531441,    4782969, 43046721,
+                                   387420489, 1162261467};
+
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
+        int a, b, c;
+        cin >> a >> b >> c;
 
-        sort(nums.begin(), nums.end());
+        int twoDigCnt = a - c;
+        int threeDigCnt = b - c;
+
+        cout << (nDigTwoPowers[twoDigCnt] * int(pow(10, c - 1))) << " "
+             << (nDigThreePowers[threeDigCnt] * int(pow(10, c - 1))) << "\n";
     }
     return 0;
 }

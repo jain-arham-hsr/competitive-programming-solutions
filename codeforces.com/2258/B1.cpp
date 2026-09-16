@@ -47,13 +47,30 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int n;
-        cin >> n;
+        int n, m;
+        cin >> n >> m;
         vector<int> nums(n);
         for (auto &x : nums)
             cin >> x;
 
-        sort(nums.begin(), nums.end());
+        vector<int> freq(m + 1);
+        for (int i = 0; i < n; i++) {
+            freq[nums[i]]++;
+        }
+
+        int res = 0;
+        int suffFreq = n;
+        for (int i = 0; i <= m; i++) {
+            int curr = suffFreq;
+            if (i * 2 <= m) {
+                curr += freq[i * 2];
+            }
+            res = max(res, curr);
+            suffFreq -= freq[i];
+            watch(res);
+        }
+
+        cout << res << "\n";
     }
     return 0;
 }

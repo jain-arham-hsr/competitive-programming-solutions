@@ -44,16 +44,10 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int n;
-        cin >> n;
-        vector<int> nums(n);
-        for (auto &x : nums)
-            cin >> x;
+    int n;
+    cin >> n;
 
-        sort(nums.begin(), nums.end());
-    }
+    cout << 10 - (n % 10);
+
     return 0;
 }

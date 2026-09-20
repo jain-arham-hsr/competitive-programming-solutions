@@ -1,25 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-typedef unsigned long long ull;
-typedef __int128 i128;
-typedef unsigned __int128 u128;
-
-ostream &operator<<(ostream &os, i128 x) {
-    if (x < 0) {
-        os << '-';
-        x = -x;
-    }
-    if (x > 9)
-        os << (i128)(x / 10);
-    return os << (int)(x % 10);
-}
-
-ostream &operator<<(ostream &os, u128 x) {
-    if (x > 9)
-        os << (u128)(x / 10);
-    return os << (int)(x % 10);
-}
 
 template <typename A, typename B>
 ostream &operator<<(ostream &os, const pair<A, B> &p) {
@@ -59,41 +40,56 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-unsigned long long isqrt(unsigned long long n) {
-    unsigned long long r = sqrtl(n);
-    while (r * r > n)
-        r--;
-    while ((r + 1) * (r + 1) <= n)
-        r++;
-    return r;
-}
+struct Comb {
+    long long MOD;
+    vector<long long> fact, inv_fact;
 
-ull trialDivision(ull n) {
-    ull S = 1;
-    for (long long i = 2; i * i <= min(ull(1e6), n); i++)
-        while (n % i == 0) {
-            if (S % i == 0)
-                S /= i;
-            else
-                S *= i;
-            n /= i;
+    Comb(int maxn, long long mod) : MOD(mod), fact(maxn), inv_fact(maxn) {
+        fact[0] = 1;
+        for (int i = 1; i < maxn; i++)
+            fact[i] = fact[i - 1] * i % MOD;
+        inv_fact[maxn - 1] = power(fact[maxn - 1], MOD - 2);
+        for (int i = maxn - 2; i >= 0; i--)
+            inv_fact[i] = inv_fact[i + 1] * (i + 1) % MOD;
+    }
+
+    long long nPr(int n, int r) {
+        if (r < 0 || r > n)
+            return 0;
+        return fact[n] * inv_fact[n - r] % MOD;
+    }
+
+    long long nCr(int n, int r) {
+        if (r < 0 || r > n)
+            return 0;
+        return fact[n] * inv_fact[r] % MOD * inv_fact[n - r] % MOD;
+    }
+
+  private:
+    long long power(long long base, long long exp) {
+        long long res = 1;
+        base %= MOD;
+        for (; exp > 0; exp >>= 1) {
+            if (exp & 1)
+                res = res * base % MOD;
+            base = base * base % MOD;
         }
-    if (n > 1 && isqrt(n) * isqrt(n) != n)
-        S *= n;
-    return S;
-}
+        return res;
+    }
+};
+
+int MOD = 1e9 + 7;
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    ull n;
-    cin >> n;
+    int n, m;
+    cin >> n >> m;
 
-    i128 S = trialDivision(n);
-    i128 y = isqrt(n / S) + 1;
+    Comb comb(n + m, MOD);
 
-    cout << (S * y * y) << "\n";
+    cout << comb.nCr(n + m - 1, n - 1);
 
     return 0;
 }

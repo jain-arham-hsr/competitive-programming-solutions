@@ -1,25 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-typedef unsigned long long ull;
-typedef __int128 i128;
-typedef unsigned __int128 u128;
-
-ostream &operator<<(ostream &os, i128 x) {
-    if (x < 0) {
-        os << '-';
-        x = -x;
-    }
-    if (x > 9)
-        os << (i128)(x / 10);
-    return os << (int)(x % 10);
-}
-
-ostream &operator<<(ostream &os, u128 x) {
-    if (x > 9)
-        os << (u128)(x / 10);
-    return os << (int)(x % 10);
-}
 
 template <typename A, typename B>
 ostream &operator<<(ostream &os, const pair<A, B> &p) {
@@ -59,41 +40,14 @@ template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
 
 // ==================================================================== //
 
-unsigned long long isqrt(unsigned long long n) {
-    unsigned long long r = sqrtl(n);
-    while (r * r > n)
-        r--;
-    while ((r + 1) * (r + 1) <= n)
-        r++;
-    return r;
-}
-
-ull trialDivision(ull n) {
-    ull S = 1;
-    for (long long i = 2; i * i <= min(ull(1e6), n); i++)
-        while (n % i == 0) {
-            if (S % i == 0)
-                S /= i;
-            else
-                S *= i;
-            n /= i;
-        }
-    if (n > 1 && isqrt(n) * isqrt(n) != n)
-        S *= n;
-    return S;
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    ull n;
-    cin >> n;
-
-    i128 S = trialDivision(n);
-    i128 y = isqrt(n / S) + 1;
-
-    cout << (S * y * y) << "\n";
-
+    int T;
+    cin >> T;
+    while (T--) {
+        // code here
+    }
     return 0;
 }

@@ -1,6 +1,25 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+typedef unsigned long long ull;
+typedef __int128 i128;
+typedef unsigned __int128 u128;
+
+ostream &operator<<(ostream &os, i128 x) {
+    if (x < 0) {
+        os << '-';
+        x = -x;
+    }
+    if (x > 9)
+        os << (i128)(x / 10);
+    return os << (int)(x % 10);
+}
+
+ostream &operator<<(ostream &os, u128 x) {
+    if (x > 9)
+        os << (u128)(x / 10);
+    return os << (int)(x % 10);
+}
 
 template <typename A, typename B>
 ostream &operator<<(ostream &os, const pair<A, B> &p) {
@@ -44,39 +63,36 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int T;
-    cin >> T;
-    while (T--) {
-        ll n, m;
-        cin >> n >> m;
-        ll n0 = n;
-        int cnt2 = 0, cnt5 = 0;
-        ll k = 1;
-        while (n > 0 && n % 2 == 0) {
-            n /= 2;
-            cnt2++;
-        }
-        while (n > 0 && n % 5 == 0) {
-            n /= 5;
-            cnt5++;
-        }
-        while (cnt2 < cnt5 && k * 2 <= m) {
-            cnt2++;
-            k *= 2;
-        }
-        while (cnt5 < cnt2 && k * 5 <= m) {
-            cnt5++;
-            k *= 5;
-        }
-        while (k * 10 <= m) {
-            k *= 10;
-        }
-        if (k == 1) {
-            cout << n0 * m << endl;
-        } else {
-            k *= m / k; // 1 <= m/k < 10
-            cout << n0 * k << endl;
-        }
+    int n;
+    cin >> n;
+
+    string s;
+    cin >> s;
+
+    vector<vector<int>> maxLen(n + 1, vector<int>(26));
+
+    vector<int> freq(26);
+    for (int i = 0; i < n; i++) {
+        freq[s[i] - 'a']++;
+        maxLen[freq[s[i] - 'a']][s[i] - 'a'] = i + 1;
     }
+
+    int m;
+    cin >> m;
+
+    while (m--) {
+        string t;
+        cin >> t;
+
+        int res = 0;
+
+        vector<int> currFreq(26);
+        for (auto ch : t) {
+            currFreq[ch - 'a']++;
+            res = max(res, maxLen[currFreq[ch - 'a']][ch - 'a']);
+        }
+        cout << res << "\n";
+    }
+
     return 0;
 }

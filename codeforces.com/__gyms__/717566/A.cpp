@@ -1,6 +1,25 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+typedef unsigned long long ull;
+typedef __int128 i128;
+typedef unsigned __int128 u128;
+
+ostream &operator<<(ostream &os, i128 x) {
+    if (x < 0) {
+        os << '-';
+        x = -x;
+    }
+    if (x > 9)
+        os << (i128)(x / 10);
+    return os << (int)(x % 10);
+}
+
+ostream &operator<<(ostream &os, u128 x) {
+    if (x > 9)
+        os << (u128)(x / 10);
+    return os << (int)(x % 10);
+}
 
 template <typename A, typename B>
 ostream &operator<<(ostream &os, const pair<A, B> &p) {
@@ -47,35 +66,19 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        ll n, m;
-        cin >> n >> m;
-        ll n0 = n;
-        int cnt2 = 0, cnt5 = 0;
-        ll k = 1;
-        while (n > 0 && n % 2 == 0) {
-            n /= 2;
-            cnt2++;
-        }
-        while (n > 0 && n % 5 == 0) {
-            n /= 5;
-            cnt5++;
-        }
-        while (cnt2 < cnt5 && k * 2 <= m) {
-            cnt2++;
-            k *= 2;
-        }
-        while (cnt5 < cnt2 && k * 5 <= m) {
-            cnt5++;
-            k *= 5;
-        }
-        while (k * 10 <= m) {
-            k *= 10;
-        }
-        if (k == 1) {
-            cout << n0 * m << endl;
+        int n, m, x, y, d;
+        cin >> n >> m >> x >> y >> d;
+
+        bool topBlocked = x - 1 <= d;
+        bool bottomBlocked = n - x <= d;
+        bool leftBlocked = y - 1 <= d;
+        bool rightBlocked = m - y <= d;
+
+        if (topBlocked && bottomBlocked || leftBlocked && rightBlocked ||
+            topBlocked && leftBlocked || bottomBlocked && rightBlocked) {
+            cout << "-1" << "\n";
         } else {
-            k *= m / k; // 1 <= m/k < 10
-            cout << n0 * k << endl;
+            cout << (n + m - 2) << "\n";
         }
     }
     return 0;

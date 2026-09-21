@@ -44,39 +44,24 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
+    vector<int> nDigTwoPowers = {8,         64,        512,     8192,
+                                 65536,     524288,    8388608, 67108864,
+                                 536870912, 1073741824};
+    vector<int> nDigThreePowers = {9,         81,        729,     6561,
+                                   59049,     531441,    4782969, 43046721,
+                                   387420489, 1162261467};
+
     int T;
     cin >> T;
     while (T--) {
-        ll n, m;
-        cin >> n >> m;
-        ll n0 = n;
-        int cnt2 = 0, cnt5 = 0;
-        ll k = 1;
-        while (n > 0 && n % 2 == 0) {
-            n /= 2;
-            cnt2++;
-        }
-        while (n > 0 && n % 5 == 0) {
-            n /= 5;
-            cnt5++;
-        }
-        while (cnt2 < cnt5 && k * 2 <= m) {
-            cnt2++;
-            k *= 2;
-        }
-        while (cnt5 < cnt2 && k * 5 <= m) {
-            cnt5++;
-            k *= 5;
-        }
-        while (k * 10 <= m) {
-            k *= 10;
-        }
-        if (k == 1) {
-            cout << n0 * m << endl;
-        } else {
-            k *= m / k; // 1 <= m/k < 10
-            cout << n0 * k << endl;
-        }
+        int a, b, c;
+        cin >> a >> b >> c;
+
+        int twoDigCnt = a - c;
+        int threeDigCnt = b - c;
+
+        cout << (nDigTwoPowers[twoDigCnt] * int(pow(10, c - 1))) << " "
+             << (nDigThreePowers[threeDigCnt] * int(pow(10, c - 1))) << "\n";
     }
     return 0;
 }

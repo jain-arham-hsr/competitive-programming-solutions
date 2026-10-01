@@ -6,7 +6,7 @@
       "type": "shell",
       "command": "python3",
       "args": [
-        "${workspaceFolder}/__templates__/update_snippets.py",
+        "${workspaceFolder}/__templates__/_update_snippets.py",
         "${workspaceFolder}"
       ],
       "presentation": {

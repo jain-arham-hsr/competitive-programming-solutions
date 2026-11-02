@@ -1,0 +1,206 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef unsigned long long ull;
+typedef __int128 i128;
+typedef unsigned __int128 u128;
+
+ostream &operator<<(ostream &os, i128 x) {
+    if (x < 0) {
+        os << '-';
+        x = -x;
+    }
+    if (x > 9)
+        os << (i128)(x / 10);
+    return os << (int)(x % 10);
+}
+
+ostream &operator<<(ostream &os, u128 x) {
+    if (x > 9)
+        os << (u128)(x / 10);
+    return os << (int)(x % 10);
+}
+
+template <typename A, typename B>
+ostream &operator<<(ostream &os, const pair<A, B> &p) {
+    return os << "(" << p.first << ", " << p.second << ")";
+}
+
+ostream &operator<<(ostream &os, const string &s) {
+    for (char c : s)
+        os << c;
+    return os;
+}
+
+template <typename T, typename = typename T::iterator>
+ostream &operator<<(ostream &os, const T &c);
+
+template <typename... Ts>
+ostream &operator<<(ostream &os, const tuple<Ts...> &t) {
+    os << "(";
+    apply(
+        [&](auto &...x) {
+            bool f = true;
+            ((os << (f ? f = false, "" : ", ") << x), ...);
+        },
+        t);
+    return os << ")";
+}
+
+template <typename T>
+auto operator<<(ostream &os, const T &x) -> decltype(x._fields(), os) {
+    return os << x._fields();
+}
+
+template <typename T, typename C>
+ostream &operator<<(ostream &os, stack<T, C> s) {
+    vector<T> v;
+    for (; !s.empty(); s.pop())
+        v.push_back(s.top());
+    reverse(v.begin(), v.end());
+    return os << v;
+}
+
+template <typename T, typename C>
+ostream &operator<<(ostream &os, queue<T, C> q) {
+    os << "{";
+    for (bool f = true; !q.empty(); q.pop())
+        os << (f ? f = false, "" : ", ") << q.front();
+    return os << "}";
+}
+
+template <typename T, typename C, typename Cmp>
+ostream &operator<<(ostream &os, priority_queue<T, C, Cmp> pq) {
+    os << "{";
+    for (bool f = true; !pq.empty(); pq.pop())
+        os << (f ? f = false, "" : ", ") << pq.top();
+    return os << "}";
+}
+
+template <typename T, typename> ostream &operator<<(ostream &os, const T &c) {
+    os << "{";
+    bool f = true;
+    for (auto &x : c)
+        os << (f ? f = false, "" : ", ") << x;
+    return os << "}";
+}
+
+void debug_out() { cerr << "\n"; }
+template <typename H, typename... T> void debug_out(H &&h, T &&...t) {
+    cerr << h;
+    if constexpr (sizeof...(t))
+        cerr << ", ";
+    debug_out(forward<T>(t)...);
+}
+
+#ifdef DEBUGGER
+#define watch(...)                                                             \
+    cerr << __func__ << ":" << __LINE__ << " | " << #__VA_ARGS__ << " = ",     \
+        debug_out(__VA_ARGS__)
+#else
+#define watch(...) ((void)0)
+#endif
+
+#define FIELDS(...)                                                            \
+    auto _fields() const { return tie(__VA_ARGS__); }                          \
+    template <typename O> bool operator<(const O &o) const {                   \
+        return _fields() < o._fields();                                        \
+    }                                                                          \
+    template <typename O> bool operator>(const O &o) const {                   \
+        return _fields() > o._fields();                                        \
+    }                                                                          \
+    template <typename O> bool operator==(const O &o) const {                  \
+        return _fields() == o._fields();                                       \
+    }                                                                          \
+    template <typename O> bool operator!=(const O &o) const {                  \
+        return _fields() != o._fields();                                       \
+    }
+
+// ==================================================================== //
+
+struct DSU {
+  private:
+    vector<int> parent, rank_, size_;
+
+  public:
+    DSU(int n) : parent(n), rank_(n, 0), size_(n, 1) {
+        for (int i = 0; i < n; i++)
+            parent[i] = i;
+    }
+
+    int find(int x) { return parent[x] == x ? x : parent[x] = find(parent[x]); }
+
+    bool unite(int x, int y) {
+        x = find(x);
+        y = find(y);
+        if (x == y)
+            return false;
+        if (rank_[x] < rank_[y])
+            swap(x, y);
+        parent[y] = x;
+        size_[x] += size_[y];
+        if (rank_[x] == rank_[y])
+            rank_[x]++;
+        return true;
+    }
+
+    bool connected(int x, int y) { return find(x) == find(y); }
+    int size(int x) { return size_[find(x)]; }
+    int components(int n) {
+        int cnt = 0;
+        for (int i = 0; i < n; i++)
+            if (find(i) == i)
+                cnt++;
+        return cnt;
+    }
+};
+
+int getIdx(int i, int j, int n, int m) { return i * m + j; }
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    int n, m;
+    cin >> n >> m;
+
+    int grid[n][m];
+
+    int start, end;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            char ch;
+            cin >> ch;
+            if (ch == '#')
+                grid[i][j] = 0;
+            else
+                grid[i][j] = 1;
+
+            if (ch == 'A')
+                start = getIdx(i, j, n, m);
+            if (ch == 'B')
+                end = getIdx(i, j, n, m);
+        }
+    }
+
+    DSU dsu(n * m + 1);
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (!grid[i][j]) {
+                dsu.unite(getIdx(i, j, n, m), n * m);
+                continue;
+            }
+
+            if (i < n - 1 && grid[i + 1][j])
+                dsu.unite(getIdx(i, j, n, m), getIdx(i + 1, j, n, m));
+            if (j < m - 1 && grid[i][j + 1])
+                dsu.unite(getIdx(i, j, n, m), getIdx(i, j + 1, n, m));
+        }
+    }
+
+    cout << dsu.components(n * m + 1) - 1 << "\n";
+
+    return 0;
+}
